@@ -1,0 +1,86 @@
+import { Pieces } from "./pieces";
+
+export default class Rook extends Pieces {
+  constructor(color, row, col, board) {
+    super(color, board);
+    this.row = row;
+    this.col = col;
+    this.rookPath = [];
+  }
+
+  show() {
+    this.rookPath = [];
+    this.#rookPath();
+    this.rookPathSet = new Set(this.rookPath.map(([r, c]) => `${r},${c}`));
+    return this.rookPath;
+  }
+
+  #rookPath() {
+    const currentRook = this.board.board[this.row][this.col];
+    if (!currentRook) return;
+    let rookColor = currentRook[0];
+
+    // UP
+    for (let i = this.row - 1; i >= 0; i--) {
+      const square = this.board.board[i][this.col];
+      if (square === null) {
+        this.rookPath.push([i, this.col]);
+      } else if (!square.includes(rookColor)) {
+        // stop after capturing enemy piece
+        this.rookPath.push([i, this.col]);
+        break; // stop after capturing
+      } else break; // same color piece
+    }
+
+    // DOWN
+    for (let i = this.row + 1; i < 8; i++) {
+      const square = this.board.board[i][this.col];
+
+      if (square === null) this.rookPath.push([i, this.col]);
+      else if (!square.includes(rookColor)) {
+        this.rookPath.push([i, this.col]);
+        break;
+      } else break;
+    }
+
+    // LEFT
+    for (let i = this.col - 1; i >= 0; i--) {
+      const square = this.board.board[this.row][i];
+      if (square === null) this.rookPath.push([this.row, i]);
+      else if (!square.includes(rookColor)) {
+        this.rookPath.push([this.row, i]);
+        break;
+      } else break;
+    }
+
+    // RIGHT
+    for (let i = this.col + 1; i < 8; i++) {
+      const square = this.board.board[this.row][i];
+      if (square === null) this.rookPath.push([this.row, i]);
+      else if (!square.includes(rookColor)) {
+        this.rookPath.push([this.row, i]);
+        break;
+      } else break;
+    }
+  }
+
+  moveRook(toRow, toCol) {
+    this.rookPath = [];
+    this.#rookPath();
+    this.rookPathSet = new Set(this.rookPath.map(([r, c]) => `${r},${c}`));
+
+    if (this.rookPathSet.has(`${toRow},${toCol}`)) {
+      this.#move(this.row, this.col, toRow, toCol);
+    }
+    return this.show();
+  }
+
+  #move(fromRow, fromCol, toRow, toCol) {
+    let current = this.board.board[fromRow][fromCol]; // rook
+    if (!current) return;
+    this.board.board[toRow][toCol] = current; // move the rook
+    this.board.board[fromRow][fromCol] = null; // empty the previous sopt
+    this.row = toRow; // make the moved row the new row
+    this.col = toCol; // make the moved col the new col
+  }
+}
