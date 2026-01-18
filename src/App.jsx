@@ -2,6 +2,7 @@ import { Pieces } from "./logic/pieces";
 import { Board } from "./logic/board";
 import Pawn from "./logic/pawn";
 import Rook from "./logic/rook";
+import Knights from "./logic/knight";
 import "./App.css";
 
 function App() {
