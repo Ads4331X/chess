@@ -12,6 +12,7 @@ export default class Rook extends Pieces {
     this.rookPath = [];
     this.#rookPath();
     this.rookPathSet = new Set(this.rookPath.map(([r, c]) => `${r},${c}`));
+    // console.log(this.rookPathSet);
     return this.rookPath;
   }
 
