@@ -15,7 +15,7 @@ export class Bishiop extends Pieces {
   #topLeftPath() {
     let { count, bishiopColor } = this.#getCountandCOlor();
 
-    // till col reaches 0  decrease the row (top left side)
+    // till col reaches 0  decrease the row upto 0 (top left side)
     for (let movePath = this.row - 1; movePath >= 0; movePath--) {
       if (this.col - count < 0) {
         break;
@@ -34,6 +34,7 @@ export class Bishiop extends Pieces {
   #topRightPath() {
     let { count, bishiopColor } = this.#getCountandCOlor();
 
+    // till col reaches 7  decrease the row upto 0 (top right side)
     for (let movePath = this.row - 1; movePath >= 0; movePath--) {
       if (this.col + count > 7) {
         break;
@@ -53,6 +54,7 @@ export class Bishiop extends Pieces {
   #bottomRightPath() {
     let { count, bishiopColor } = this.#getCountandCOlor();
 
+    // till col reaches 7  increase the row uptp 7 (bottom right side)
     for (let movePath = this.row + 1; movePath <= 7; movePath++) {
       if (this.col + count > 7) {
         break;
@@ -72,6 +74,7 @@ export class Bishiop extends Pieces {
   #bottomLeftPath() {
     let { count, bishiopColor } = this.#getCountandCOlor();
 
+    // till col reaches 0  increase the row uptp 7 (bottom left side)
     for (let movePath = this.row + 1; movePath <= 7; movePath++) {
       if (this.col - count < 0) {
         break;

@@ -5,6 +5,7 @@ import Rook from "./logic/rook";
 import Knight from "./logic/knight";
 import { Bishiop } from "./logic/bishop";
 import "./App.css";
+import { Queen } from "./logic/queen";
 
 function App() {
   const gameBoard = new Board();
@@ -19,7 +20,7 @@ function App() {
   let wKnight = new Knight("white", 7, 1, gameBoard);
   let bKnight = new Knight("black", 0, 1, gameBoard);
   let wBishiop = new Bishiop("white", 7, 2, gameBoard);
-  let bBishiop = new Bishiop("black", 0, 2, gameBoard);
+  let wQueen = new Queen("white", 7, 3, gameBoard);
   pieces.initialize();
   wiitePawn.show();
   p.movePawn(4, 1);
@@ -36,6 +37,9 @@ function App() {
   bKnight.moveKnight(2, 2);
   wKnight.moveKnight(5, 0);
   wBishiop.moveBishiop(6, 1);
+  wQueen.moveQueen(6, 3);
+  wQueen.moveQueen(3, 6);
+  wQueen.moveQueen(1, 6);
 
   return <></>;
 }
