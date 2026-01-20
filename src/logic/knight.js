@@ -107,11 +107,16 @@ export default class Knight extends Pieces {
   }
 
   #move(fromRow, fromCol, toRow, toCol) {
+    if (!this.board.isTurn(this.color)) {
+      // console.log("Not your turn!");
+      return false;
+    }
     const knight = this.board.board[fromRow][fromCol];
     this.board.board[toRow][toCol] = knight;
     this.board.board[fromRow][fromCol] = null;
     this.row = toRow;
     this.col = toCol;
+    this.board.switchTurn();
   }
   moveKnight(toRow, toCol) {
     this.#availablePath();

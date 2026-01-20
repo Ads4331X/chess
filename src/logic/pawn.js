@@ -59,11 +59,17 @@ export default class Pawn extends Pieces {
   }
 
   #move(fromRow, fromCol, toRow, toCol) {
+    if (!this.board.isTurn(this.color)) {
+      // console.log("Not your turn!");
+      return false;
+    }
     const pawn = this.board.board[fromRow][fromCol];
     this.board.board[toRow][toCol] = pawn;
     this.board.board[fromRow][fromCol] = null;
     this.row = toRow;
     this.col = toCol;
+
+    this.board.switchTurn();
   }
   movePawn(toRow, toCol) {
     this.#availablePath();

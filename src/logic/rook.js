@@ -77,11 +77,17 @@ export default class Rook extends Pieces {
   }
 
   #move(fromRow, fromCol, toRow, toCol) {
+    if (!this.board.isTurn(this.color)) {
+      // console.log("Not your turn!");
+      return false;
+    }
     let current = this.board.board[fromRow][fromCol]; // rook
     if (!current) return;
     this.board.board[toRow][toCol] = current; // move the rook
     this.board.board[fromRow][fromCol] = null; // empty the previous sopt
     this.row = toRow; // make the moved row the new row
     this.col = toCol; // make the moved col the new col
+
+    this.board.switchTurn();
   }
 }

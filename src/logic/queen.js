@@ -154,11 +154,17 @@ export class Queen extends Pieces {
   }
 
   #move(fromRow, fromCol, toRow, toCol) {
+    if (!this.board.isTurn(this.color)) {
+      // console.log("Not your turn!");
+      return false;
+    }
     const queen = this.board.board[fromRow][fromCol];
     this.board.board[toRow][toCol] = queen;
     this.board.board[fromRow][fromCol] = null;
     this.row = toRow;
     this.col = toCol;
+
+    this.board.switchTurn();
   }
   moveQueen(toRow, toCol) {
     this.#availablePaths();
