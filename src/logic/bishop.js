@@ -120,6 +120,5 @@ export class Bishiop extends Pieces {
     this.bishiopPathSet = new Set(
       this.bishiopPath.map(([row, col]) => `${row},${col}`),
     );
-    console.log(this.bishiopPath);
   }
 }

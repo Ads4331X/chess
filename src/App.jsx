@@ -21,9 +21,11 @@ function App() {
   let wBishiop = new Bishiop("white", 7, 2, gameBoard);
   let bBishiop = new Bishiop("black", 0, 2, gameBoard);
   pieces.initialize();
+  wiitePawn.show();
   p.movePawn(4, 1);
   pawn.movePawn(4, 3);
   p1.movePawn(2, 0);
+  p1.movePawn(3, 0);
   wiitePawn.movePawn(5, 0);
   wiitePawn.movePawn(4, 0);
   blackPawn.movePawn(3, 1);
