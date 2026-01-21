@@ -1,4 +1,4 @@
-import { Box, Button } from "@mui/material";
+import { Box, Button, colors } from "@mui/material";
 import { Square } from "./square";
 
 import { Pieces } from "../logic/pieces";
@@ -36,6 +36,7 @@ const icons = {
 
 export default function UIBoard() {
   const [gameBoard] = useState(new Board());
+  const [movablePaths, setMovablePath] = useState([]);
 
   return (
     <Box
@@ -67,19 +68,41 @@ export default function UIBoard() {
                     border: 0,
                     padding: 0,
                     margin: 0,
+                    backgroundColor: (c + r) % 2 === 0 ? "#EEEED2" : "#769656",
                   }}
                   onClick={() => {
                     gameBoard.onClick(i);
-                    console.log(i.show());
+                    setMovablePath(i.show());
                   }}
                 >
                   <Square
-                    sx={{
-                      backgroundColor:
-                        (c + r) % 2 === 0 ? "#EEEED2" : "#769656",
-                    }}
+                    sx={
+                      {
+                        // backgroundColor: movablePaths.some(
+                        //   ([row, col]) => row === r && col === c,
+                        // )
+                        //   ? "grey"
+                        //   : "",
+                      }
+                    }
                   >
                     {Icon && <Icon size={100} />}
+                    {movablePaths.some(
+                      ([row, col]) => row === r && col === c,
+                    ) ? (
+                      <Box
+                        sx={{
+                          position: "relative",
+                          top: "40%",
+                          left: "40%",
+                          fontWeight: "bold",
+                          width: "15px",
+                          height: "15px",
+                          borderRadius: "100%",
+                          backgroundColor: "goldenrod",
+                        }}
+                      ></Box>
+                    ) : null}
                   </Square>
                 </Button>
               );

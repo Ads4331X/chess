@@ -87,7 +87,7 @@ export default class Pawn {
     this.pawnPathSet = new Set(
       this.pawnPath.map(([row, col]) => `${row},${col}`),
     );
-    console.log(this.pawnPathSet);
+    // console.log(this.pawnPathSet);
     return this.pawnPath;
   }
 }
