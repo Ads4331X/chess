@@ -71,7 +71,7 @@ export default class Pawn {
 
     this.board.switchTurn();
   }
-  movePawn(toRow, toCol) {
+  move(toRow, toCol) {
     this.#availablePath();
     this.pawnPathSet = new Set(
       this.pawnPath.map(([row, col]) => `${row},${col}`),

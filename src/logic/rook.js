@@ -65,7 +65,7 @@ export default class Rook {
     }
   }
 
-  moveRook(toRow, toCol) {
+  move(toRow, toCol) {
     this.rookPath = [];
     this.#rookPath();
     this.rookPathSet = new Set(this.rookPath.map(([r, c]) => `${r},${c}`));

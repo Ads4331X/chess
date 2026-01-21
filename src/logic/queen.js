@@ -167,7 +167,7 @@ export class Queen {
 
     this.board.switchTurn();
   }
-  moveQueen(toRow, toCol) {
+  move(toRow, toCol) {
     this.#availablePaths();
     this.queenPathSet = new Set(
       this.queenPath.map(([row, col]) => `${row},${col}`),

@@ -114,7 +114,7 @@ export class Bishiop {
 
     this.board.switchTurn();
   }
-  moveBishiop(toRow, toCol) {
+  move(toRow, toCol) {
     this.#availablePath();
     this.bishiopPathSet = new Set(
       this.bishiopPath.map(([row, col]) => `${row},${col}`),

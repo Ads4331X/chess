@@ -71,37 +71,38 @@ export default function UIBoard() {
                     backgroundColor: (c + r) % 2 === 0 ? "#EEEED2" : "#769656",
                   }}
                   onClick={() => {
-                    gameBoard.onClick(i);
-                    setMovablePath(i.show());
+                    // gameBoard.onClick(i);
+                    i !== null ? setMovablePath(i.show()) : null;
                   }}
                 >
-                  <Square
-                    sx={
-                      {
-                        // backgroundColor: movablePaths.some(
-                        //   ([row, col]) => row === r && col === c,
-                        // )
-                        //   ? "grey"
-                        //   : "",
-                      }
-                    }
-                  >
+                  <Square>
                     {Icon && <Icon size={100} />}
                     {movablePaths.some(
                       ([row, col]) => row === r && col === c,
                     ) ? (
                       <Box
                         sx={{
-                          position: "relative",
-                          top: "40%",
-                          left: "40%",
-                          fontWeight: "bold",
-                          width: "15px",
-                          height: "15px",
-                          borderRadius: "100%",
-                          backgroundColor: "goldenrod",
+                          width: "100%",
+                          height: "100%",
                         }}
-                      ></Box>
+                        onClick={() => {
+                          console.log(i);
+                          i.move();
+                        }}
+                      >
+                        <Box
+                          sx={{
+                            position: "relative",
+                            top: "40%",
+                            left: "40%",
+                            fontWeight: "bold",
+                            width: "15px",
+                            height: "15px",
+                            borderRadius: "100%",
+                            backgroundColor: "goldenrod",
+                          }}
+                        ></Box>
+                      </Box>
                     ) : null}
                   </Square>
                 </Button>

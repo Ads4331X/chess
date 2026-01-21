@@ -118,7 +118,7 @@ export default class Knight {
     this.col = toCol;
     this.board.switchTurn();
   }
-  moveKnight(toRow, toCol) {
+  move(toRow, toCol) {
     this.#availablePath();
     this.movableSet = new Set(
       this.knightPath.map(([row, col]) => `${row},${col}`),
