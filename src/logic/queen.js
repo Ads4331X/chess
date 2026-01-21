@@ -1,14 +1,14 @@
-import { Pieces } from "./pieces";
-
-export class Queen extends Pieces {
-  constructor(color, row, col, board) {
-    super(color, board);
+export class Queen {
+  constructor(color, row, col, board, name) {
+    this.color = color;
     this.row = row;
     this.col = col;
+    this.board = board;
+    this.name = name;
     this.queenPath = [];
   }
   #getColorAndCount() {
-    return { count: 1, queenColor: this.board.board[this.row][this.col][0] };
+    return { count: 1, queenColor: this.color };
   }
 
   #topLeftPath() {
@@ -19,9 +19,9 @@ export class Queen extends Pieces {
       if (this.col - count < 0) {
         break;
       }
-      let currentLeftSquare = this.board.board[movePath][this.col - count];
+      let currentLeftSquare = this.board[movePath][this.col - count];
 
-      if (currentLeftSquare === null || !currentLeftSquare.includes(queenColor))
+      if (currentLeftSquare === null || currentLeftSquare.color !== queenColor)
         this.queenPath.push([movePath, this.col - count]);
       else break;
       count++;
@@ -35,11 +35,11 @@ export class Queen extends Pieces {
       if (this.col + count > 7) {
         break;
       }
-      let currentRightSquare = this.board.board[movePath][this.col + count];
+      let currentRightSquare = this.board[movePath][this.col + count];
 
       if (
         currentRightSquare === null ||
-        !currentRightSquare.includes(queenColor)
+        currentRightSquare.color !== queenColor
       )
         this.queenPath.push([movePath, this.col + count]);
       else break;
@@ -55,11 +55,11 @@ export class Queen extends Pieces {
       if (this.col + count > 7) {
         break;
       }
-      let currentRightSquare = this.board.board[movePath][this.col + count];
+      let currentRightSquare = this.board[movePath][this.col + count];
 
       if (
         currentRightSquare === null ||
-        !currentRightSquare.includes(queenColor)
+        currentRightSquare.color !== queenColor
       )
         this.queenPath.push([movePath, this.col + count]);
       else break;
@@ -75,9 +75,9 @@ export class Queen extends Pieces {
       if (this.col - count < 0) {
         break;
       }
-      let currentLeftSquare = this.board.board[movePath][this.col - count];
+      let currentLeftSquare = this.board[movePath][this.col - count];
 
-      if (currentLeftSquare === null || !currentLeftSquare.includes(queenColor))
+      if (currentLeftSquare === null || currentLeftSquare.color !== queenColor)
         this.queenPath.push([movePath, this.col - count]);
       else break;
 
@@ -89,10 +89,10 @@ export class Queen extends Pieces {
     // UP
     const { queenColor } = this.#getColorAndCount();
     for (let movePath = this.row - 1; movePath >= 0; movePath--) {
-      const square = this.board.board[movePath][this.col];
+      const square = this.board[movePath][this.col];
       if (square === null) {
         this.queenPath.push([movePath, this.col]);
-      } else if (!square.includes(queenColor)) {
+      } else if (square.color !== queenColor) {
         // stop after capturing enemy piece
         this.queenPath.push([movePath, this.col]);
         break; // stop after capturing
@@ -104,9 +104,9 @@ export class Queen extends Pieces {
     // DOWN
     const { queenColor } = this.#getColorAndCount();
     for (let movePath = this.row + 1; movePath < 8; movePath++) {
-      const square = this.board.board[movePath][this.col];
+      const square = this.board[movePath][this.col];
       if (square === null) this.queenPath.push([movePath, this.col]);
-      else if (!square.includes(queenColor)) {
+      else if (square.color !== queenColor) {
         this.queenPath.push([movePath, this.col]);
         break;
       } else break;
@@ -117,9 +117,9 @@ export class Queen extends Pieces {
     // LEFT
     const { queenColor } = this.#getColorAndCount();
     for (let movePath = this.col - 1; movePath >= 0; movePath--) {
-      const square = this.board.board[this.row][movePath];
+      const square = this.board[this.row][movePath];
       if (square === null) this.queenPath.push([this.row, movePath]);
-      else if (!square.includes(queenColor)) {
+      else if (square.color !== queenColor) {
         this.queenPath.push([this.row, movePath]);
         break;
       } else break;
@@ -130,9 +130,9 @@ export class Queen extends Pieces {
     // RIGHT
     const { queenColor } = this.#getColorAndCount();
     for (let movePath = this.col + 1; movePath < 8; movePath++) {
-      const square = this.board.board[this.row][movePath];
+      const square = this.board[this.row][movePath];
       if (square === null) this.queenPath.push([this.row, movePath]);
-      else if (!square.includes(queenColor)) {
+      else if (square.color !== queenColor) {
         this.queenPath.push([this.row, movePath]);
         break;
       } else break;
@@ -140,6 +140,7 @@ export class Queen extends Pieces {
   }
 
   #availablePaths() {
+    this.queenPath = [];
     // bishiop movement of queen (diagonals)
     this.#topLeftPath();
     this.#topRightPath();
@@ -158,9 +159,9 @@ export class Queen extends Pieces {
       // console.log("Not your turn!");
       return false;
     }
-    const queen = this.board.board[fromRow][fromCol];
-    this.board.board[toRow][toCol] = queen;
-    this.board.board[fromRow][fromCol] = null;
+    const queen = this.board[fromRow][fromCol];
+    this.board[toRow][toCol] = queen;
+    this.board[fromRow][fromCol] = null;
     this.row = toRow;
     this.col = toCol;
 
@@ -180,5 +181,6 @@ export class Queen extends Pieces {
       this.queenPath.map(([row, col]) => `${row},${col}`),
     );
     // console.log(this.queenPathSet);
+    return this.queenPath;
   }
 }

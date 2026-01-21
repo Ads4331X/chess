@@ -1,4 +1,4 @@
-import { Box } from "@mui/material";
+import { Box, Button } from "@mui/material";
 import { Square } from "./square";
 
 import { Pieces } from "../logic/pieces";
@@ -37,8 +37,6 @@ const icons = {
 export default function UIBoard() {
   const [gameBoard] = useState(new Board());
 
-  console.log(gameBoard.board);
-
   return (
     <Box
       sx={{
@@ -55,16 +53,35 @@ export default function UIBoard() {
           >
             {" "}
             {rows.map((i, c) => {
-              const Icon = icons[i];
+              let Icon;
+              if (typeof i === "string") {
+                Icon = icons[i];
+              } else if (i !== null) {
+                // console.log(i);
+                Icon = icons[i.name];
+              }
               return (
-                <Square
+                <Button
                   key={`${r},${c}`}
                   sx={{
-                    backgroundColor: (c + r) % 2 === 0 ? "#EEEED2" : "#769656",
+                    border: 0,
+                    padding: 0,
+                    margin: 0,
+                  }}
+                  onClick={() => {
+                    gameBoard.onClick(i);
+                    console.log(i.show());
                   }}
                 >
-                  {Icon && <Icon size={100} />}
-                </Square>
+                  <Square
+                    sx={{
+                      backgroundColor:
+                        (c + r) % 2 === 0 ? "#EEEED2" : "#769656",
+                    }}
+                  >
+                    {Icon && <Icon size={100} />}
+                  </Square>
+                </Button>
               );
             })}
           </Box>
@@ -73,5 +90,3 @@ export default function UIBoard() {
     </Box>
   );
 }
-
-function getIcon(i) {}

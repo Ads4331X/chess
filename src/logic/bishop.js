@@ -1,15 +1,15 @@
-import { Pieces } from "./pieces";
-
-export class Bishiop extends Pieces {
-  constructor(color, row, col, board) {
-    super(color, board);
+export class Bishiop {
+  constructor(color, row, col, board, name) {
+    this.color = color;
     this.row = row;
     this.col = col;
+    this.board = board;
+    this.name = name;
     this.bishiopPath = [];
   }
 
   #getCountandCOlor() {
-    return { count: 1, bishiopColor: this.board.board[this.row][this.col][0] };
+    return { count: 1, bishiopColor: this.color };
   }
 
   #topLeftPath() {
@@ -20,11 +20,11 @@ export class Bishiop extends Pieces {
       if (this.col - count < 0) {
         break;
       }
-      let currentLeftSquare = this.board.board[movePath][this.col - count];
+      let currentLeftSquare = this.board[movePath][this.col - count];
 
       if (
         currentLeftSquare === null ||
-        !currentLeftSquare.includes(bishiopColor)
+        currentLeftSquare.color !== bishiopColor
       )
         this.bishiopPath.push([movePath, this.col - count]);
       else break;
@@ -39,11 +39,11 @@ export class Bishiop extends Pieces {
       if (this.col + count > 7) {
         break;
       }
-      let currentRightSquare = this.board.board[movePath][this.col + count];
+      let currentRightSquare = this.board[movePath][this.col + count];
 
       if (
         currentRightSquare === null ||
-        !currentRightSquare.includes(bishiopColor)
+        currentRightSquare.color !== bishiopColor
       )
         this.bishiopPath.push([movePath, this.col + count]);
       else break;
@@ -59,11 +59,11 @@ export class Bishiop extends Pieces {
       if (this.col + count > 7) {
         break;
       }
-      let currentRightSquare = this.board.board[movePath][this.col + count];
+      let currentRightSquare = this.board[movePath][this.col + count];
 
       if (
         currentRightSquare === null ||
-        !currentRightSquare.includes(bishiopColor)
+        currentRightSquare.color !== bishiopColor
       )
         this.bishiopPath.push([movePath, this.col + count]);
       else break;
@@ -79,11 +79,11 @@ export class Bishiop extends Pieces {
       if (this.col - count < 0) {
         break;
       }
-      let currentLeftSquare = this.board.board[movePath][this.col - count];
+      let currentLeftSquare = this.board[movePath][this.col - count];
 
       if (
         currentLeftSquare === null ||
-        !currentLeftSquare.includes(bishiopColor)
+        currentLeftSquare.color !== bishiopColor
       )
         this.bishiopPath.push([movePath, this.col - count]);
       else break;
@@ -106,9 +106,9 @@ export class Bishiop extends Pieces {
       // console.log("Not your turn!");
       return false;
     }
-    const bishiop = this.board.board[fromRow][fromCol];
-    this.board.board[toRow][toCol] = bishiop;
-    this.board.board[fromRow][fromCol] = null;
+    const bishiop = this.board[fromRow][fromCol];
+    this.board[toRow][toCol] = bishiop;
+    this.board[fromRow][fromCol] = null;
     this.row = toRow;
     this.col = toCol;
 
@@ -129,5 +129,6 @@ export class Bishiop extends Pieces {
     this.bishiopPathSet = new Set(
       this.bishiopPath.map(([row, col]) => `${row},${col}`),
     );
+    return this.bishiopPath;
   }
 }

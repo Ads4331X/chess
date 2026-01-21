@@ -1,12 +1,12 @@
-import { Pieces } from "./pieces";
-
-export default class Pawn extends Pieces {
-  constructor(type = "pawn", color, row, col, board) {
-    super(color, board);
+export default class Pawn {
+  constructor(type = "pawn", color, row, col, board, name) {
+    // super(color, board);
+    this.name = name;
     this.type = type;
     this.color = color;
     this.row = row;
     this.col = col;
+    this.board = board;
     this.pawnPositons = [];
     this.direction = 0;
   }
@@ -19,9 +19,9 @@ export default class Pawn extends Pieces {
     this.pawnPath = [];
 
     // Get pawn color
-    const piece = this.board.board[this.row][this.col];
+    const piece = this.board[this.row][this.col];
     if (!piece) return;
-    const pawnColor = piece[0];
+    const pawnColor = this.color;
 
     // Determine movement direction
     this.direction = pawnColor === "b" ? 1 : -1;
@@ -29,7 +29,7 @@ export default class Pawn extends Pieces {
     const nextRow = this.row + this.direction;
 
     // Single step forward
-    if (this.#isValid(nextRow) && !this.board.board[nextRow][this.col]) {
+    if (this.#isValid(nextRow) && !this.board[nextRow][this.col]) {
       this.pawnPath.push([nextRow, this.col]);
 
       // Double step forward
@@ -37,7 +37,7 @@ export default class Pawn extends Pieces {
       if (
         this.#canMove2Step(this.row, pawnColor) &&
         this.#isValid(twoStepsRow) &&
-        !this.board.board[twoStepsRow][this.col]
+        !this.board[twoStepsRow][this.col]
       ) {
         this.pawnPath.push([twoStepsRow, this.col]);
       }
@@ -48,7 +48,7 @@ export default class Pawn extends Pieces {
     for (const c of diagonals) {
       if (!this.#isValid(c) || !this.#isValid(nextRow)) continue;
 
-      const diagSquare = this.board.board[nextRow][c];
+      const diagSquare = this.board[nextRow][c];
       if (diagSquare && diagSquare[0] !== pawnColor) {
         this.pawnPath.push([nextRow, c]);
       }
@@ -63,9 +63,9 @@ export default class Pawn extends Pieces {
       // console.log("Not your turn!");
       return false;
     }
-    const pawn = this.board.board[fromRow][fromCol];
-    this.board.board[toRow][toCol] = pawn;
-    this.board.board[fromRow][fromCol] = null;
+    const pawn = this.board[fromRow][fromCol];
+    this.board[toRow][toCol] = pawn;
+    this.board[fromRow][fromCol] = null;
     this.row = toRow;
     this.col = toCol;
 
@@ -87,7 +87,7 @@ export default class Pawn extends Pieces {
     this.pawnPathSet = new Set(
       this.pawnPath.map(([row, col]) => `${row},${col}`),
     );
-    // console.log(this.pawnPathSet);
+    console.log(this.pawnPathSet);
     return this.pawnPath;
   }
 }

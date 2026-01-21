@@ -1,5 +1,11 @@
+import { Bishiop } from "./bishop";
 import { Board } from "./board";
+import { King } from "./king";
+import Knight from "./knight";
 
+import Pawn from "./pawn";
+import { Queen } from "./queen";
+import Rook from "./rook";
 /**
  * the coordinates of the pieces with their respective names
  */
@@ -62,7 +68,15 @@ export class Pieces {
       // add white pawns to the board
       let firstCood = wP[0];
       let secondCood = wP[1];
-      this.board[firstCood][secondCood] = "wP";
+      const pawn = new Pawn(
+        "Pawn",
+        "w",
+        firstCood,
+        secondCood,
+        this.board,
+        "wP",
+      );
+      this.board[firstCood][secondCood] = pawn;
     });
   }
 
@@ -73,6 +87,15 @@ export class Pieces {
       let firstCood = bP[0];
       let secondCood = bP[1];
       this.board[firstCood][secondCood] = "bP";
+      const pawn = new Pawn(
+        "Pawn",
+        "b",
+        firstCood,
+        secondCood,
+        this.board,
+        "bP",
+      );
+      this.board[firstCood][secondCood] = pawn;
     });
   }
 
@@ -81,7 +104,8 @@ export class Pieces {
       // add black Knights to the board
       let firstCood = bH[0];
       let secondCood = bH[1];
-      this.board[firstCood][secondCood] = "bH";
+      const knight = new Knight("b", firstCood, secondCood, this.board, "bH");
+      this.board[firstCood][secondCood] = knight;
     });
   }
   /** initialize white knights to the board in thier initial position */
@@ -90,7 +114,8 @@ export class Pieces {
       // add white Knights to the board
       let firstCood = wH[0];
       let secondCood = wH[1];
-      this.board[firstCood][secondCood] = "wH";
+      const knight = new Knight("w", firstCood, secondCood, this.board, "wH");
+      this.board[firstCood][secondCood] = knight;
     });
   }
   /** initialize white rooks to to board in their initial position */
@@ -99,7 +124,9 @@ export class Pieces {
       // add white rooks to the board
       let firstCood = wR[0];
       let secondCood = wR[1];
-      this.board[firstCood][secondCood] = "wR";
+
+      const rook = new Rook("w", firstCood, secondCood, this.board, "wR");
+      this.board[firstCood][secondCood] = rook;
     });
   }
   /** initialize black rooks to the board in their initial position */
@@ -108,7 +135,8 @@ export class Pieces {
       // add white rooks to the board
       let firstCood = bR[0];
       let secondCood = bR[1];
-      this.board[firstCood][secondCood] = "bR";
+      const rook = new Rook("b", firstCood, secondCood, this.board, "bR");
+      this.board[firstCood][secondCood] = rook;
     });
   }
   /** initialize white bishiops to the board in their initial position */
@@ -117,7 +145,8 @@ export class Pieces {
       // add white bishiop to the board
       let firstCood = wB[0];
       let secondCood = wB[1];
-      this.board[firstCood][secondCood] = "wB";
+      const bishiop = new Bishiop("w", firstCood, secondCood, this.board, "wB");
+      this.board[firstCood][secondCood] = bishiop;
     });
   }
   /** initialize black bishiops to the board in their initial position */
@@ -126,7 +155,8 @@ export class Pieces {
       // add black bishiop to the board
       let firstCood = bB[0];
       let secondCood = bB[1];
-      this.board[firstCood][secondCood] = "bB";
+      const bishiop = new Bishiop("b", firstCood, secondCood, this.board, "bB");
+      this.board[firstCood][secondCood] = bishiop;
     });
   }
   /** initialize black queen to the board in their initial position */
@@ -135,7 +165,8 @@ export class Pieces {
       // add black queen to the board
       let firstCood = bQ[0];
       let secondCood = bQ[1];
-      this.board[firstCood][secondCood] = "bQ";
+      const queen = new Queen("b", firstCood, secondCood, this.board, "bQ");
+      this.board[firstCood][secondCood] = queen;
     });
   }
 
@@ -145,7 +176,8 @@ export class Pieces {
       // add white queen to the board
       let firstCood = wQ[0];
       let secondCood = wQ[1];
-      this.board[firstCood][secondCood] = "wQ";
+      const queen = new Queen("w", firstCood, secondCood, this.board, "wQ");
+      this.board[firstCood][secondCood] = queen;
     });
   }
   /** initialize black king to the board in their initial position */
@@ -154,7 +186,8 @@ export class Pieces {
       // add black king to the board
       let firstCood = bK[0];
       let secondCood = bK[1];
-      this.board[firstCood][secondCood] = "bK";
+      const king = new King("b", firstCood, secondCood, this.board, "bK");
+      this.board[firstCood][secondCood] = king;
     });
   }
   /** initialize white king to the board in their initial position */
@@ -163,7 +196,8 @@ export class Pieces {
       // add white king to the board
       let firstCood = wK[0];
       let secondCood = wK[1];
-      this.board[firstCood][secondCood] = "wK";
+      const king = new King("w", firstCood, secondCood, this.board, "wK");
+      this.board[firstCood][secondCood] = king;
     });
   }
 

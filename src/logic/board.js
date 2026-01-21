@@ -24,6 +24,10 @@ export class Board {
   Display() {
     return this.board;
   }
+
+  onClick(piece) {
+    console.log(piece);
+  }
 }
 
 // let wiitePawn = new Pawn("pawn", "w", 6, 0, gameBoard);

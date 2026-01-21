@@ -1,10 +1,10 @@
-import { Pieces } from "./pieces";
-
-export default class Knight extends Pieces {
-  constructor(color, row, col, board) {
-    super(color, board);
+export default class Knight {
+  constructor(color, row, col, board, name) {
+    this.color = color;
     this.row = row;
     this.col = col;
+    this.board = board;
+    this.name = name;
     this.knightPath = [];
   }
 
@@ -18,34 +18,34 @@ export default class Knight extends Pieces {
     const verticalLeftCol = this.col - 1;
     const verticalRightCol = this.col + 1;
 
-    const knightColor = this.board.board[this.row][this.col][0];
+    const knightColor = this.board[this.row][this.col][0];
 
     // top left path
     if (this.#isValid(verticalUpRow) && this.#isValid(verticalLeftCol)) {
-      const square = this.board.board[verticalUpRow][verticalLeftCol];
-      if (square === null || !square.includes(knightColor))
+      const square = this.board[verticalUpRow][verticalLeftCol];
+      if (square === null || square.color !== knightColor)
         this.knightPath.push([verticalUpRow, verticalLeftCol]);
     }
 
     // top right path
     if (this.#isValid(verticalUpRow) && this.#isValid(verticalRightCol)) {
-      const square = this.board.board[verticalUpRow][verticalRightCol];
-      if (square === null || !square.includes(knightColor))
+      const square = this.board[verticalUpRow][verticalRightCol];
+      if (square === null || square.color !== knightColor)
         this.knightPath.push([verticalUpRow, verticalRightCol]);
     }
 
     // bottom left path
     if (this.#isValid(verticalDownRow) && this.#isValid(verticalLeftCol)) {
-      const square = this.board.board[verticalDownRow][verticalLeftCol];
-      if (square === null || !square.includes(knightColor))
+      const square = this.board[verticalDownRow][verticalLeftCol];
+      if (square === null || square.color !== knightColor)
         this.knightPath.push([verticalDownRow, verticalLeftCol]);
     }
 
     // bottom right path
     if (this.#isValid(verticalDownRow) && this.#isValid(verticalRightCol)) {
-      const square = this.board.board[verticalDownRow][verticalRightCol];
+      const square = this.board[verticalDownRow][verticalRightCol];
 
-      if (square === null || !square.includes(knightColor)) {
+      if (square === null || square.color !== knightColor) {
         this.knightPath.push([verticalDownRow, verticalRightCol]);
       }
     }
@@ -57,33 +57,33 @@ export default class Knight extends Pieces {
     const horizontalUpRow = this.row + 1;
     const horizontalDownRow = this.row - 1;
 
-    const knightColor = this.board.board[this.row][this.col][0];
+    const knightColor = this.color;
 
     // left top path
     if (this.#isValid(horizontalLeftCol) && this.#isValid(horizontalUpRow)) {
-      const square = this.board.board[horizontalUpRow][horizontalLeftCol];
-      if (square === null || !square.includes(knightColor))
+      const square = this.board[horizontalUpRow][horizontalLeftCol];
+      if (square === null || square.color !== knightColor)
         this.knightPath.push([horizontalUpRow, horizontalLeftCol]);
     }
 
     // right top path
     if (this.#isValid(horizontalRightCol) && this.#isValid(horizontalUpRow)) {
-      const square = this.board.board[horizontalUpRow][horizontalRightCol];
-      if (square === null || !square.includes(knightColor))
+      const square = this.board[horizontalUpRow][horizontalRightCol];
+      if (square === null || square.color !== knightColor)
         this.knightPath.push([horizontalUpRow, horizontalRightCol]);
     }
 
     // right bottom path
     if (this.#isValid(horizontalRightCol) && this.#isValid(horizontalDownRow)) {
-      const square = this.board.board[horizontalDownRow][horizontalRightCol];
-      if (square === null || !square.includes(knightColor))
+      const square = this.board[horizontalDownRow][horizontalRightCol];
+      if (square === null || square.color !== knightColor)
         this.knightPath.push([horizontalDownRow, horizontalRightCol]);
     }
 
     // left bottom path
     if (this.#isValid(horizontalLeftCol) && this.#isValid(horizontalDownRow)) {
-      const square = this.board.board[horizontalDownRow][horizontalLeftCol];
-      if (square === null || !square.includes(knightColor))
+      const square = this.board[horizontalDownRow][horizontalLeftCol];
+      if (square === null || square.color !== knightColor)
         this.knightPath.push([horizontalDownRow, horizontalLeftCol]);
     }
   }
@@ -111,9 +111,9 @@ export default class Knight extends Pieces {
       // console.log("Not your turn!");
       return false;
     }
-    const knight = this.board.board[fromRow][fromCol];
-    this.board.board[toRow][toCol] = knight;
-    this.board.board[fromRow][fromCol] = null;
+    const knight = this.board[fromRow][fromCol];
+    this.board[toRow][toCol] = knight;
+    this.board[fromRow][fromCol] = null;
     this.row = toRow;
     this.col = toCol;
     this.board.switchTurn();
