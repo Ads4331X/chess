@@ -1,13 +1,7 @@
-import { Box, Button, colors } from "@mui/material";
+import { Box, Button } from "@mui/material";
 import { Square } from "./square";
 
-import { Pieces } from "../logic/pieces";
 import { Board } from "../logic/board";
-import Pawn from "../logic/pawn";
-import Rook from "../logic/rook";
-import Knight from "../logic/knight";
-import { Queen } from "../logic/queen";
-import { Bishiop } from "../logic/bishop";
 
 import WPawnIcon from "../assets/w-pawn";
 import { useState } from "react";
@@ -111,9 +105,16 @@ export default function UIBoard() {
                       ([row, col]) => row === r && col === c,
                     ) ? (
                       <Box
+                        // darkens the square of the movable path
                         sx={{
+                          position: "absolute",
+                          top: 0,
+                          left: 0,
                           width: "100%",
                           height: "100%",
+                          backgroundColor: "rgba(0,0,0,0.15)",
+                          zIndex: 5,
+                          pointerEvents: "none",
                         }}
                         onClick={(e) => {
                           e.stopPropagation();
@@ -125,15 +126,16 @@ export default function UIBoard() {
                         {/** for displaying a golden dot on the movable path */}
                         <Box
                           sx={{
-                            position: "relative",
-                            top: "40%",
-                            left: "40%",
-                            fontWeight: "bold",
-                            width: "15px",
-                            height: "15px",
-                            borderRadius: "100%",
-                            backgroundColor: "goldenrod",
-                            zIndex: 100,
+                            position: "absolute",
+                            top: "50%",
+                            left: "50%",
+                            width: "12px",
+                            height: "12px",
+                            borderRadius: "50%",
+                            backgroundColor: "orange",
+                            zIndex: 10,
+                            pointerEvents: "none",
+                            transform: "translate(-50%, -50%)", // perfectly centers
                           }}
                         ></Box>
                       </Box>
