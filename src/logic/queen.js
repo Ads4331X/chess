@@ -21,9 +21,12 @@ export class Queen {
       }
       let currentLeftSquare = this.board[movePath][this.col - count];
 
-      if (currentLeftSquare === null || currentLeftSquare.color !== queenColor)
+      if (currentLeftSquare === null)
         this.queenPath.push([movePath, this.col - count]);
-      else break;
+      else if (currentLeftSquare.color !== queenColor) {
+        this.queenPath.push([movePath, this.col - count]);
+        break;
+      } else break;
       count++;
     }
   }
@@ -37,12 +40,12 @@ export class Queen {
       }
       let currentRightSquare = this.board[movePath][this.col + count];
 
-      if (
-        currentRightSquare === null ||
-        currentRightSquare.color !== queenColor
-      )
+      if (currentRightSquare === null)
         this.queenPath.push([movePath, this.col + count]);
-      else break;
+      else if (currentRightSquare.color !== queenColor) {
+        this.queenPath.push([movePath, this.col - count]);
+        break;
+      } else break;
       count++;
     }
   }
@@ -57,12 +60,12 @@ export class Queen {
       }
       let currentRightSquare = this.board[movePath][this.col + count];
 
-      if (
-        currentRightSquare === null ||
-        currentRightSquare.color !== queenColor
-      )
+      if (currentRightSquare === null)
         this.queenPath.push([movePath, this.col + count]);
-      else break;
+      else if (currentRightSquare.color !== queenColor) {
+        this.queenPath.push([movePath, this.col - count]);
+        break;
+      } else break;
       count++;
     }
   }
@@ -77,9 +80,12 @@ export class Queen {
       }
       let currentLeftSquare = this.board[movePath][this.col - count];
 
-      if (currentLeftSquare === null || currentLeftSquare.color !== queenColor)
+      if (currentLeftSquare === null)
         this.queenPath.push([movePath, this.col - count]);
-      else break;
+      else if (currentLeftSquare.color !== queenColor) {
+        this.queenPath.push([movePath, this.col - count]);
+        break;
+      } else break;
 
       count++;
     }
