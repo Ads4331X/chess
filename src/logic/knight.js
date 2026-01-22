@@ -12,88 +12,35 @@ export default class Knight {
     return check <= 7 && check >= 0;
   }
 
-  #verticalPaths() {
-    const verticalUpRow = this.row + 2;
-    const verticalDownRow = this.row - 2;
-    const verticalLeftCol = this.col - 1;
-    const verticalRightCol = this.col + 1;
-
-    const knightColor = this.board[this.row][this.col][0];
-
-    // top left path
-    if (this.#isValid(verticalUpRow) && this.#isValid(verticalLeftCol)) {
-      const square = this.board[verticalUpRow][verticalLeftCol];
-      if (square === null || square.color !== knightColor)
-        this.knightPath.push([verticalUpRow, verticalLeftCol]);
-    }
-
-    // top right path
-    if (this.#isValid(verticalUpRow) && this.#isValid(verticalRightCol)) {
-      const square = this.board[verticalUpRow][verticalRightCol];
-      if (square === null || square.color !== knightColor)
-        this.knightPath.push([verticalUpRow, verticalRightCol]);
-    }
-
-    // bottom left path
-    if (this.#isValid(verticalDownRow) && this.#isValid(verticalLeftCol)) {
-      const square = this.board[verticalDownRow][verticalLeftCol];
-      if (square === null || square.color !== knightColor)
-        this.knightPath.push([verticalDownRow, verticalLeftCol]);
-    }
-
-    // bottom right path
-    if (this.#isValid(verticalDownRow) && this.#isValid(verticalRightCol)) {
-      const square = this.board[verticalDownRow][verticalRightCol];
-
-      if (square === null || square.color !== knightColor) {
-        this.knightPath.push([verticalDownRow, verticalRightCol]);
-      }
-    }
-  }
-
-  #horizontalPaths() {
-    const horizontalLeftCol = this.col - 2;
-    const horizontalRightCol = this.col + 2;
-    const horizontalUpRow = this.row + 1;
-    const horizontalDownRow = this.row - 1;
-
-    const knightColor = this.color;
-
-    // left top path
-    if (this.#isValid(horizontalLeftCol) && this.#isValid(horizontalUpRow)) {
-      const square = this.board[horizontalUpRow][horizontalLeftCol];
-      if (square === null || square.color !== knightColor)
-        this.knightPath.push([horizontalUpRow, horizontalLeftCol]);
-    }
-
-    // right top path
-    if (this.#isValid(horizontalRightCol) && this.#isValid(horizontalUpRow)) {
-      const square = this.board[horizontalUpRow][horizontalRightCol];
-      if (square === null || square.color !== knightColor)
-        this.knightPath.push([horizontalUpRow, horizontalRightCol]);
-    }
-
-    // right bottom path
-    if (this.#isValid(horizontalRightCol) && this.#isValid(horizontalDownRow)) {
-      const square = this.board[horizontalDownRow][horizontalRightCol];
-      if (square === null || square.color !== knightColor)
-        this.knightPath.push([horizontalDownRow, horizontalRightCol]);
-    }
-
-    // left bottom path
-    if (this.#isValid(horizontalLeftCol) && this.#isValid(horizontalDownRow)) {
-      const square = this.board[horizontalDownRow][horizontalLeftCol];
-      if (square === null || square.color !== knightColor)
-        this.knightPath.push([horizontalDownRow, horizontalLeftCol]);
-    }
-  }
-
   #availablePath() {
     this.knightPath = [];
-    // vertical movement
-    this.#verticalPaths();
-    // horizontal movement
-    this.#horizontalPaths();
+
+    this.knightPath = [];
+    const knightColor = this.color;
+
+    // all 8 possible moves as [rowOffset, colOffset]
+    const moves = [
+      [2, 1],
+      [2, -1],
+      [-2, 1],
+      [-2, -1],
+      [1, 2],
+      [1, -2],
+      [-1, 2],
+      [-1, -2],
+    ];
+
+    for (const [rOff, cOff] of moves) {
+      const newRow = this.row + rOff;
+      const newCol = this.col + cOff;
+
+      if (!this.#isValid(newRow) || !this.#isValid(newCol)) continue;
+
+      const square = this.board[newRow][newCol];
+      if (!square || square.color !== knightColor) {
+        this.knightPath.push([newRow, newCol]);
+      }
+    }
   }
 
   show() {
