@@ -13,4 +13,6 @@ export class King {
     this.#availablePaths();
     return this.kingPath;
   }
+
+  move(toRow, toCol) {}
 }
