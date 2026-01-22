@@ -102,17 +102,18 @@ export class Bishiop {
   }
 
   #move(fromRow, fromCol, toRow, toCol) {
-    if (!this.board.isTurn(this.color)) {
+    if (!this.board.__board__.isTurn(this.color)) {
       // console.log("Not your turn!");
       return false;
     }
+
     const bishiop = this.board[fromRow][fromCol];
     this.board[toRow][toCol] = bishiop;
     this.board[fromRow][fromCol] = null;
     this.row = toRow;
     this.col = toCol;
 
-    this.board.switchTurn();
+    this.board.__board__.switchTurn();
   }
   move(toRow, toCol) {
     this.#availablePath();
