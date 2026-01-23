@@ -23,6 +23,11 @@ export class Queen {
 
       if (currentLeftSquare === null)
         this.queenPath.push([movePath, this.col - count]);
+      else if (
+        currentLeftSquare.color !== queenColor &&
+        currentLeftSquare.name[1] === "K"
+      )
+        this.queenPath.push([movePath, this.col - count]);
       else if (currentLeftSquare.color !== queenColor) {
         this.queenPath.push([movePath, this.col - count]);
         break;
@@ -42,8 +47,13 @@ export class Queen {
 
       if (currentRightSquare === null)
         this.queenPath.push([movePath, this.col + count]);
+      else if (
+        currentRightSquare.color !== queenColor &&
+        currentRightSquare.name[1] === "K"
+      )
+        this.queenPath.push([movePath, this.col + count]);
       else if (currentRightSquare.color !== queenColor) {
-        this.queenPath.push([movePath, this.col - count]);
+        this.queenPath.push([movePath, this.col + count]);
         break;
       } else break;
       count++;
@@ -62,8 +72,13 @@ export class Queen {
 
       if (currentRightSquare === null)
         this.queenPath.push([movePath, this.col + count]);
+      else if (
+        currentRightSquare.color !== queenColor &&
+        currentRightSquare.name[1] === "K"
+      )
+        this.queenPath.push([movePath, this.col + count]);
       else if (currentRightSquare.color !== queenColor) {
-        this.queenPath.push([movePath, this.col - count]);
+        this.queenPath.push([movePath, this.col + count]);
         break;
       } else break;
       count++;
@@ -82,6 +97,11 @@ export class Queen {
 
       if (currentLeftSquare === null)
         this.queenPath.push([movePath, this.col - count]);
+      else if (
+        currentLeftSquare.color !== queenColor &&
+        currentLeftSquare.name[1] === "K"
+      )
+        this.queenPath.push([movePath, this.col - count]);
       else if (currentLeftSquare.color !== queenColor) {
         this.queenPath.push([movePath, this.col - count]);
         break;
@@ -96,9 +116,10 @@ export class Queen {
     const { queenColor } = this.#getColorAndCount();
     for (let movePath = this.row - 1; movePath >= 0; movePath--) {
       const square = this.board[movePath][this.col];
-      if (square === null) {
+      if (square === null) this.queenPath.push([movePath, this.col]);
+      else if (square.color !== queenColor && square.name[1] === "K")
         this.queenPath.push([movePath, this.col]);
-      } else if (square.color !== queenColor) {
+      else if (square.color !== queenColor) {
         // stop after capturing enemy piece
         this.queenPath.push([movePath, this.col]);
         break; // stop after capturing
@@ -112,6 +133,8 @@ export class Queen {
     for (let movePath = this.row + 1; movePath < 8; movePath++) {
       const square = this.board[movePath][this.col];
       if (square === null) this.queenPath.push([movePath, this.col]);
+      else if (square.color !== queenColor && square.name[1] === "K")
+        this.queenPath.push([movePath, this.col]);
       else if (square.color !== queenColor) {
         this.queenPath.push([movePath, this.col]);
         break;
@@ -125,6 +148,8 @@ export class Queen {
     for (let movePath = this.col - 1; movePath >= 0; movePath--) {
       const square = this.board[this.row][movePath];
       if (square === null) this.queenPath.push([this.row, movePath]);
+      else if (square.color !== queenColor && square.name[1] === "K")
+        this.queenPath.push([this.row, movePath]);
       else if (square.color !== queenColor) {
         this.queenPath.push([this.row, movePath]);
         break;
@@ -138,6 +163,8 @@ export class Queen {
     for (let movePath = this.col + 1; movePath < 8; movePath++) {
       const square = this.board[this.row][movePath];
       if (square === null) this.queenPath.push([this.row, movePath]);
+      else if (square.color !== queenColor && square.name[1] === "K")
+        this.queenPath.push([this.row, movePath]);
       else if (square.color !== queenColor) {
         this.queenPath.push([this.row, movePath]);
         break;
@@ -158,6 +185,11 @@ export class Queen {
     this.#verticalDown();
     this.#horizontalLeft();
     this.#horizontalRight();
+  }
+
+  getAttackSquares() {
+    this.#availablePaths();
+    return this.queenPath;
   }
 
   #move(fromRow, fromCol, toRow, toCol) {

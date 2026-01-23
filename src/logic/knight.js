@@ -8,17 +8,14 @@ export default class Knight {
     this.knightPath = [];
   }
 
-  #isValid(check) {
-    return check <= 7 && check >= 0;
+  #isValid(pos) {
+    return pos >= 0 && pos <= 7;
   }
 
   #availablePath() {
     this.knightPath = [];
-
-    this.knightPath = [];
     const knightColor = this.color;
 
-    // all 8 possible moves as [rowOffset, colOffset]
     const moves = [
       [2, 1],
       [2, -1],
@@ -43,36 +40,53 @@ export default class Knight {
     }
   }
 
+  isCheckingKing() {
+    this.#availablePath();
+    const enemyColor = this.color === "w" ? "b" : "w";
+
+    for (let r = 0; r < 8; r++) {
+      for (let c = 0; c < 8; c++) {
+        const square = this.board[r][c];
+        if (square && square.color === enemyColor && square.name[1] === "K") {
+          const kingPos = `${r},${c}`;
+          const attackSet = new Set(
+            this.knightPath.map(([r, c]) => `${r},${c}`),
+          );
+          return attackSet.has(kingPos);
+        }
+      }
+    }
+    return false;
+  }
+
   show() {
     this.#availablePath();
-    this.movableSet = new Set(
-      this.knightPath.map(([row, col]) => `${row},${col}`),
-    );
-    // console.log(this.movableSet);
-
     return this.knightPath;
   }
 
+  getAttackSquares() {
+    return this.show();
+  }
+
   #move(fromRow, fromCol, toRow, toCol) {
-    if (!this.board.__board__.isTurn(this.color)) {
-      // console.log("Not your turn!");
-      return false;
-    }
+    if (!this.board.__board__.isTurn(this.color)) return false;
 
     const knight = this.board[fromRow][fromCol];
+    if (!knight) return;
+
     this.board[toRow][toCol] = knight;
     this.board[fromRow][fromCol] = null;
     this.row = toRow;
     this.col = toCol;
+
     this.board.__board__.switchTurn();
   }
+
   move(toRow, toCol) {
     this.#availablePath();
-    this.movableSet = new Set(
-      this.knightPath.map(([row, col]) => `${row},${col}`),
-    );
+    const movableSet = new Set(this.knightPath.map(([r, c]) => `${r},${c}`));
 
-    if (this.movableSet.has(`${toRow},${toCol}`)) {
+    if (movableSet.has(`${toRow},${toCol}`)) {
       this.#move(this.row, this.col, toRow, toCol);
     }
 

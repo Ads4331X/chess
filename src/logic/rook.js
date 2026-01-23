@@ -24,9 +24,10 @@ export default class Rook {
     // UP
     for (let i = this.row - 1; i >= 0; i--) {
       const square = this.board[i][this.col];
-      if (square === null) {
+      if (square === null) this.rookPath.push([i, this.col]);
+      else if (square.color !== rookColor && square.name[1] === "K")
         this.rookPath.push([i, this.col]);
-      } else if (square.color !== rookColor) {
+      else if (square.color !== rookColor) {
         // stop after capturing enemy piece
         this.rookPath.push([i, this.col]);
         break; // stop after capturing
@@ -38,6 +39,8 @@ export default class Rook {
       const square = this.board[i][this.col];
 
       if (square === null) this.rookPath.push([i, this.col]);
+      else if (square.color !== rookColor && square.name[1] === "K")
+        this.rookPath.push([i, this.col]);
       else if (square.color !== rookColor) {
         this.rookPath.push([i, this.col]);
         break;
@@ -48,6 +51,8 @@ export default class Rook {
     for (let i = this.col - 1; i >= 0; i--) {
       const square = this.board[this.row][i];
       if (square === null) this.rookPath.push([this.row, i]);
+      else if (square.color !== rookColor && square.name[1] === "K")
+        this.rookPath.push([this.row, i]);
       else if (square.color !== rookColor) {
         this.rookPath.push([this.row, i]);
         break;
@@ -58,6 +63,8 @@ export default class Rook {
     for (let i = this.col + 1; i < 8; i++) {
       const square = this.board[this.row][i];
       if (square === null) this.rookPath.push([this.row, i]);
+      else if (square.color !== rookColor && square.name[1] === "K")
+        this.rookPath.push([this.row, i]);
       else if (square.color !== rookColor) {
         this.rookPath.push([this.row, i]);
         break;
@@ -65,6 +72,10 @@ export default class Rook {
     }
   }
 
+  getAttackSquares() {
+    this.#rookPath();
+    return this.rookPath;
+  }
   move(toRow, toCol) {
     this.rookPath = [];
     this.#rookPath();

@@ -58,6 +58,11 @@ export default class Pawn {
     return pos >= 0 && pos <= 7;
   }
 
+  getAttackSquares() {
+    this.#availablePath();
+    return this.pawnPath;
+  }
+
   #move(fromRow, fromCol, toRow, toCol) {
     if (!this.board.__board__.isTurn(this.color)) {
       // console.log("Not your turn!");

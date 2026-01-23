@@ -22,9 +22,14 @@ export class Bishiop {
       }
       let currentLeftSquare = this.board[movePath][this.col - count];
 
-      if (currentLeftSquare === null) {
+      if (currentLeftSquare === null)
         this.bishiopPath.push([movePath, this.col - count]);
-      } else if (currentLeftSquare.color !== bishiopColor) {
+      else if (
+        currentLeftSquare.color !== bishiopColor &&
+        currentLeftSquare.name[1] === "K"
+      )
+        this.bishiopPath.push([movePath, this.col - count]);
+      else if (currentLeftSquare.color !== bishiopColor) {
         this.bishiopPath.push([movePath, this.col - count]);
         break;
       } else break;
@@ -42,6 +47,11 @@ export class Bishiop {
       let currentRightSquare = this.board[movePath][this.col + count];
 
       if (currentRightSquare === null)
+        this.bishiopPath.push([movePath, this.col + count]);
+      else if (
+        currentRightSquare.color !== bishiopColor &&
+        currentRightSquare.name[1] === "K"
+      )
         this.bishiopPath.push([movePath, this.col + count]);
       else if (currentRightSquare.color !== bishiopColor) {
         this.bishiopPath.push([movePath, this.col + count]);
@@ -63,6 +73,11 @@ export class Bishiop {
 
       if (currentRightSquare === null)
         this.bishiopPath.push([movePath, this.col + count]);
+      else if (
+        currentRightSquare.color !== bishiopColor &&
+        currentRightSquare.name[1] === "K"
+      )
+        this.bishiopPath.push([movePath, this.col + count]);
       else if (currentRightSquare.color !== bishiopColor) {
         this.bishiopPath.push([movePath, this.col + count]);
         break;
@@ -83,6 +98,11 @@ export class Bishiop {
 
       if (currentLeftSquare === null)
         this.bishiopPath.push([movePath, this.col - count]);
+      else if (
+        currentLeftSquare.color !== bishiopColor &&
+        currentLeftSquare.name[1] === "K"
+      )
+        this.bishiopPath.push([movePath, this.col - count]);
       else if (currentLeftSquare.color !== bishiopColor) {
         this.bishiopPath.push([movePath, this.col - count]);
         break;
@@ -98,6 +118,12 @@ export class Bishiop {
     this.#topRightPath();
     this.#bottomLeftPath();
     this.#bottomRightPath();
+  }
+
+  getAttackSquares() {
+    this.#availablePath();
+
+    return this.bishiopPath;
   }
 
   #move(fromRow, fromCol, toRow, toCol) {
