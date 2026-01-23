@@ -6,6 +6,7 @@ export default class Knight {
     this.board = board;
     this.name = name;
     this.knightPath = [];
+    this.attackedSquare = [];
   }
 
   #isValid(pos) {
@@ -14,6 +15,7 @@ export default class Knight {
 
   #availablePath() {
     this.knightPath = [];
+    this.attackedSquare = [];
     const knightColor = this.color;
 
     const moves = [
@@ -36,27 +38,10 @@ export default class Knight {
       const square = this.board[newRow][newCol];
       if (!square || square.color !== knightColor) {
         this.knightPath.push([newRow, newCol]);
-      }
+        this.attackedSquare.push([newRow, newCol]);
+      } else if (square.color === knightColor)
+        this.attackedSquare.push([newRow, newCol]);
     }
-  }
-
-  isCheckingKing() {
-    this.#availablePath();
-    const enemyColor = this.color === "w" ? "b" : "w";
-
-    for (let r = 0; r < 8; r++) {
-      for (let c = 0; c < 8; c++) {
-        const square = this.board[r][c];
-        if (square && square.color === enemyColor && square.name[1] === "K") {
-          const kingPos = `${r},${c}`;
-          const attackSet = new Set(
-            this.knightPath.map(([r, c]) => `${r},${c}`),
-          );
-          return attackSet.has(kingPos);
-        }
-      }
-    }
-    return false;
   }
 
   show() {
@@ -65,7 +50,7 @@ export default class Knight {
   }
 
   getAttackSquares() {
-    return this.show();
+    return this.attackedSquare;
   }
 
   #move(fromRow, fromCol, toRow, toCol) {

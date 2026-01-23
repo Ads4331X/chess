@@ -6,10 +6,12 @@ export default class Rook {
     this.board = board;
     this.name = name;
     this.rookPath = [];
+    this.attackedSquares = [];
   }
 
   show() {
     this.rookPath = [];
+    this.attackedSquares = [];
     this.#rookPath();
     this.rookPathSet = new Set(this.rookPath.map(([r, c]) => `${r},${c}`));
     // console.log(this.rookPathSet);
@@ -31,9 +33,12 @@ export default class Rook {
         // stop after capturing enemy piece
         this.rookPath.push([i, this.col]);
         break; // stop after capturing
-      } else break; // same color piece
+      } else {
+        this.attackedSquares.push(...this.rookPath);
+        this.attackedSquares.push([i, this.col]);
+        break; // same color piece}
+      }
     }
-
     // DOWN
     for (let i = this.row + 1; i < 8; i++) {
       const square = this.board[i][this.col];
@@ -44,7 +49,11 @@ export default class Rook {
       else if (square.color !== rookColor) {
         this.rookPath.push([i, this.col]);
         break;
-      } else break;
+      } else {
+        this.attackedSquares.push(...this.rookPath);
+        this.attackedSquares.push([i, this.col]);
+        break; // same color piece}
+      }
     }
 
     // LEFT
@@ -56,7 +65,11 @@ export default class Rook {
       else if (square.color !== rookColor) {
         this.rookPath.push([this.row, i]);
         break;
-      } else break;
+      } else {
+        this.attackedSquares.push(...this.rookPath);
+        this.attackedSquares.push([i, this.col]);
+        break; // same color piece}
+      }
     }
 
     // RIGHT
@@ -68,13 +81,17 @@ export default class Rook {
       else if (square.color !== rookColor) {
         this.rookPath.push([this.row, i]);
         break;
-      } else break;
+      } else {
+        this.attackedSquares.push(...this.rookPath);
+        this.attackedSquares.push([i, this.col]);
+        break; // same color piece}
+      }
     }
   }
 
   getAttackSquares() {
     this.#rookPath();
-    return this.rookPath;
+    return this.attackedSquares;
   }
   move(toRow, toCol) {
     this.rookPath = [];

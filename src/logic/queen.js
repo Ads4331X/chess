@@ -6,6 +6,7 @@ export class Queen {
     this.board = board;
     this.name = name;
     this.queenPath = [];
+    this.attackedSquare = [];
   }
   #getColorAndCount() {
     return { count: 1, queenColor: this.color };
@@ -31,7 +32,11 @@ export class Queen {
       else if (currentLeftSquare.color !== queenColor) {
         this.queenPath.push([movePath, this.col - count]);
         break;
-      } else break;
+      } else {
+        this.attackedSquare.push(...this.queenPath);
+        this.attackedSquare.push([movePath, this.col - count]);
+        break;
+      }
       count++;
     }
   }
@@ -55,7 +60,11 @@ export class Queen {
       else if (currentRightSquare.color !== queenColor) {
         this.queenPath.push([movePath, this.col + count]);
         break;
-      } else break;
+      } else {
+        this.queenPath.push([movePath, this.col + count]);
+        this.attackedSquare.push(...this.queenPath);
+        break;
+      }
       count++;
     }
   }
@@ -80,7 +89,11 @@ export class Queen {
       else if (currentRightSquare.color !== queenColor) {
         this.queenPath.push([movePath, this.col + count]);
         break;
-      } else break;
+      } else {
+        this.queenPath.push([movePath, this.col + count]);
+        this.attackedSquare.push(...this.queenPath);
+        break;
+      }
       count++;
     }
   }
@@ -105,7 +118,11 @@ export class Queen {
       else if (currentLeftSquare.color !== queenColor) {
         this.queenPath.push([movePath, this.col - count]);
         break;
-      } else break;
+      } else {
+        this.queenPath.push([movePath, this.col - count]);
+        this.attackedSquare.push(...this.queenPath);
+        break;
+      }
 
       count++;
     }
@@ -123,7 +140,11 @@ export class Queen {
         // stop after capturing enemy piece
         this.queenPath.push([movePath, this.col]);
         break; // stop after capturing
-      } else break; // same color piece
+      } else {
+        this.attackedSquare.push(...this.queenPath);
+        this.attackedSquare.push([movePath, this.col]);
+        break; // same color piece}
+      }
     }
   }
 
@@ -138,7 +159,11 @@ export class Queen {
       else if (square.color !== queenColor) {
         this.queenPath.push([movePath, this.col]);
         break;
-      } else break;
+      } else {
+        this.attackedSquare.push(...this.queenPath);
+        this.attackedSquare.push([movePath, this.col]);
+        break; // same color piece}
+      }
     }
   }
 
@@ -153,7 +178,11 @@ export class Queen {
       else if (square.color !== queenColor) {
         this.queenPath.push([this.row, movePath]);
         break;
-      } else break;
+      } else {
+        this.attackedSquare.push(...this.queenPath);
+        this.attackedSquare.push([this.row, movePath]);
+        break; // same color piece}
+      }
     }
   }
 
@@ -168,12 +197,17 @@ export class Queen {
       else if (square.color !== queenColor) {
         this.queenPath.push([this.row, movePath]);
         break;
-      } else break;
+      } else {
+        this.attackedSquare.push(...this.queenPath);
+        this.attackedSquare.push([this.row, movePath]);
+        break; // same color piece}
+      }
     }
   }
 
   #availablePaths() {
     this.queenPath = [];
+    this.attackedSquare = [];
     // bishiop movement of queen (diagonals)
     this.#topLeftPath();
     this.#topRightPath();
@@ -189,7 +223,7 @@ export class Queen {
 
   getAttackSquares() {
     this.#availablePaths();
-    return this.queenPath;
+    return this.attackedSquare;
   }
 
   #move(fromRow, fromCol, toRow, toCol) {

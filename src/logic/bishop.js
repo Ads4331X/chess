@@ -6,6 +6,7 @@ export class Bishiop {
     this.board = board;
     this.name = name;
     this.bishiopPath = [];
+    this.attackedSquare = [];
   }
 
   #getCountandCOlor() {
@@ -32,7 +33,11 @@ export class Bishiop {
       else if (currentLeftSquare.color !== bishiopColor) {
         this.bishiopPath.push([movePath, this.col - count]);
         break;
-      } else break;
+      } else {
+        this.bishiopPath.push([movePath, this.col - count]);
+        this.attackedSquare.push(...this.bishiopPath);
+        break;
+      }
       count++;
     }
   }
@@ -56,7 +61,11 @@ export class Bishiop {
       else if (currentRightSquare.color !== bishiopColor) {
         this.bishiopPath.push([movePath, this.col + count]);
         break;
-      } else break;
+      } else {
+        this.bishiopPath.push([movePath, this.col + count]);
+        this.attackedSquare.push(...this.bishiopPath);
+        break;
+      }
       count++;
     }
   }
@@ -81,7 +90,11 @@ export class Bishiop {
       else if (currentRightSquare.color !== bishiopColor) {
         this.bishiopPath.push([movePath, this.col + count]);
         break;
-      } else break;
+      } else {
+        this.bishiopPath.push([movePath, this.col + count]);
+        this.attackedSquare.push(...this.bishiopPath);
+        break;
+      }
       count++;
     }
   }
@@ -106,13 +119,18 @@ export class Bishiop {
       else if (currentLeftSquare.color !== bishiopColor) {
         this.bishiopPath.push([movePath, this.col - count]);
         break;
-      } else break;
+      } else {
+        this.bishiopPath.push([movePath, this.col - count]);
+        this.attackedSquare.push(...this.bishiopPath);
+        break;
+      }
       count++;
     }
   }
 
   #availablePath() {
     this.bishiopPath = [];
+    this.attackedSquare = [];
 
     this.#topLeftPath();
     this.#topRightPath();
@@ -123,7 +141,7 @@ export class Bishiop {
   getAttackSquares() {
     this.#availablePath();
 
-    return this.bishiopPath;
+    return this.attackedSquare;
   }
 
   #move(fromRow, fromCol, toRow, toCol) {
