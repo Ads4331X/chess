@@ -34,7 +34,7 @@ export class Bishiop {
         this.bishiopPath.push([movePath, this.col - count]);
         break;
       } else {
-        this.bishiopPath.push([movePath, this.col - count]);
+        this.attackedSquare.push([movePath, this.col - count]);
         this.attackedSquare.push(...this.bishiopPath);
         break;
       }
@@ -62,7 +62,7 @@ export class Bishiop {
         this.bishiopPath.push([movePath, this.col + count]);
         break;
       } else {
-        this.bishiopPath.push([movePath, this.col + count]);
+        this.attackedSquare.push([movePath, this.col + count]);
         this.attackedSquare.push(...this.bishiopPath);
         break;
       }
@@ -91,7 +91,7 @@ export class Bishiop {
         this.bishiopPath.push([movePath, this.col + count]);
         break;
       } else {
-        this.bishiopPath.push([movePath, this.col + count]);
+        this.attackedSquare.push([movePath, this.col + count]);
         this.attackedSquare.push(...this.bishiopPath);
         break;
       }
@@ -120,7 +120,7 @@ export class Bishiop {
         this.bishiopPath.push([movePath, this.col - count]);
         break;
       } else {
-        this.bishiopPath.push([movePath, this.col - count]);
+        this.attackedSquare.push([movePath, this.col - count]);
         this.attackedSquare.push(...this.bishiopPath);
         break;
       }

@@ -15,9 +15,11 @@
     "@emotion/styled": "^11.14.1",
     "@mui/material": "^7.3.7",
     "@mui/styled-engine-sc": "^7.3.7",
+    "dayjs": "^1.11.19",
     "react": "^19.2.0",
     "react-dom": "^19.2.0",
     "react-draggable": "^4.5.0",
+    "react-timer-hook": "^4.0.5",
     "styled-components": "^6.3.8"
   },
   "devDependencies": {

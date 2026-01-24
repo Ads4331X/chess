@@ -61,7 +61,7 @@ export class Queen {
         this.queenPath.push([movePath, this.col + count]);
         break;
       } else {
-        this.queenPath.push([movePath, this.col + count]);
+        this.attackedSquare.push([movePath, this.col + count]);
         this.attackedSquare.push(...this.queenPath);
         break;
       }
@@ -90,7 +90,7 @@ export class Queen {
         this.queenPath.push([movePath, this.col + count]);
         break;
       } else {
-        this.queenPath.push([movePath, this.col + count]);
+        this.attackedSquare.push([movePath, this.col + count]);
         this.attackedSquare.push(...this.queenPath);
         break;
       }
@@ -119,7 +119,7 @@ export class Queen {
         this.queenPath.push([movePath, this.col - count]);
         break;
       } else {
-        this.queenPath.push([movePath, this.col - count]);
+        this.attackedSquare.push([movePath, this.col - count]);
         this.attackedSquare.push(...this.queenPath);
         break;
       }
