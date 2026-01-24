@@ -5,6 +5,7 @@ export class Board {
     this.representRow = ["a", "b", "c", "d", "e", "f", "g", "h"]; // representation
     this.representCol = ["8", "7", "6", "5", "4", "3", "2", "1"];
     this.initializeBoard();
+    this.lastMove = null;
     this.turn = "w";
   }
 
@@ -30,6 +31,23 @@ export class Board {
     }
     return false;
   }
+
+  recordMove(piece, fromRow, fromCol, toRow, toCol) {
+    if (piece.type === "pawn") {
+      this.lastMove = {
+        pieceType: "pawn",
+        color: piece.color,
+        fromRow,
+        fromCol,
+        toRow,
+        toCol,
+        wasDoubleStep: Math.abs(fromRow - toRow) === 2,
+      };
+    } else {
+      this.lastMove = { pieceType: "other" };
+    }
+  }
+
   switchTurn() {
     this.turn = this.turn === "w" ? "b" : "w";
   }

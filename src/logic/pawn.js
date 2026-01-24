@@ -1,5 +1,5 @@
 export default class Pawn {
-  constructor(type = "pawn", color, row, col, board, name) {
+  constructor(type = "Pawn", color, row, col, board, name) {
     this.name = name;
     this.type = type;
     this.color = color;
@@ -17,6 +17,31 @@ export default class Pawn {
 
   #canMove2Step(row, pawnColor) {
     return (row === 1 && pawnColor === "b") || (row === 6 && pawnColor === "w");
+  }
+
+  #checkEnpassan() {
+    const lastMove = this.board.__board__.lastMove;
+    if (!lastMove) return;
+
+    if (
+      lastMove.pieceType !== "pawn" ||
+      lastMove.color === this.color ||
+      !lastMove.wasDoubleStep
+    )
+      return;
+
+    if (
+      (this.color === "w" && this.row !== 3) ||
+      (this.color === "b" && this.row !== 4)
+    )
+      return;
+
+    if (Math.abs(this.col - lastMove.toCol) !== 1) return;
+
+    const targetRow = this.row + this.direction;
+    const targetCol = lastMove.toCol;
+
+    this.pawnPath.push([targetRow, targetCol]);
   }
 
   #availablePath() {
@@ -58,6 +83,7 @@ export default class Pawn {
         this.pawnPath.push([nextRow, c]); // can capture
       }
     }
+    this.#checkEnpassan();
   }
 
   getAttackSquares() {
@@ -69,11 +95,18 @@ export default class Pawn {
     if (!this.board.__board__.isTurn(this.color)) return false;
 
     const pawn = this.board[fromRow][fromCol];
+
+    if (fromCol !== toCol && !this.board[toRow][toCol]) {
+      const capturedPawnRow = toRow - this.direction;
+      this.board[capturedPawnRow][toCol] = null;
+    }
+
     this.board[toRow][toCol] = pawn;
     this.board[fromRow][fromCol] = null;
     this.row = toRow;
     this.col = toCol;
 
+    this.board.__board__.recordMove(pawn, fromRow, fromCol, toRow, toCol);
     this.board.__board__.switchTurn();
   }
 

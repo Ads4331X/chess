@@ -69,13 +69,14 @@ export class Pieces {
       let firstCood = wP[0];
       let secondCood = wP[1];
       const pawn = new Pawn(
-        "Pawn",
+        "pawn",
         "w",
         firstCood,
         secondCood,
         this.board,
         "wP",
       );
+
       this.board[firstCood][secondCood] = pawn;
     });
   }
@@ -88,7 +89,7 @@ export class Pieces {
       let secondCood = bP[1];
       this.board[firstCood][secondCood] = "bP";
       const pawn = new Pawn(
-        "Pawn",
+        "pawn",
         "b",
         firstCood,
         secondCood,
