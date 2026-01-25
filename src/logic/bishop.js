@@ -16,56 +16,58 @@ export class Bishiop {
   #topLeftPath() {
     let { count, bishiopColor } = this.#getCountandCOlor();
 
-    // till col reaches 0  decrease the row upto 0 (top left side)
     for (let movePath = this.row - 1; movePath >= 0; movePath--) {
-      if (this.col - count < 0) {
-        break;
-      }
+      if (this.col - count < 0) break;
+
       let currentLeftSquare = this.board[movePath][this.col - count];
 
-      if (currentLeftSquare === null)
+      if (currentLeftSquare === null) {
         this.bishiopPath.push([movePath, this.col - count]);
-      else if (
+      } else if (
         currentLeftSquare.color !== bishiopColor &&
         currentLeftSquare.name[1] === "K"
-      )
+      ) {
+        this.attackedSquare.push([movePath, this.col - count]);
         this.bishiopPath.push([movePath, this.col - count]);
-      else if (currentLeftSquare.color !== bishiopColor) {
+        break;
+      } else if (currentLeftSquare.color !== bishiopColor) {
         this.bishiopPath.push([movePath, this.col - count]);
         break;
       } else {
-        this.attackedSquare.push([movePath, this.col - count]);
-        this.attackedSquare.push(...this.bishiopPath);
+        // own piece blocks path, no attacking own path
         break;
       }
+      this.attackedSquare.push(...this.bishiopPath);
+
       count++;
     }
   }
+
   #topRightPath() {
     let { count, bishiopColor } = this.#getCountandCOlor();
 
-    // till col reaches 7  decrease the row upto 0 (top right side)
     for (let movePath = this.row - 1; movePath >= 0; movePath--) {
-      if (this.col + count > 7) {
-        break;
-      }
+      if (this.col + count > 7) break;
+
       let currentRightSquare = this.board[movePath][this.col + count];
 
-      if (currentRightSquare === null)
+      if (currentRightSquare === null) {
         this.bishiopPath.push([movePath, this.col + count]);
-      else if (
+      } else if (
         currentRightSquare.color !== bishiopColor &&
         currentRightSquare.name[1] === "K"
-      )
+      ) {
+        this.attackedSquare.push([movePath, this.col + count]);
         this.bishiopPath.push([movePath, this.col + count]);
-      else if (currentRightSquare.color !== bishiopColor) {
+        break;
+      } else if (currentRightSquare.color !== bishiopColor) {
         this.bishiopPath.push([movePath, this.col + count]);
         break;
       } else {
-        this.attackedSquare.push([movePath, this.col + count]);
-        this.attackedSquare.push(...this.bishiopPath);
         break;
       }
+      this.attackedSquare.push(...this.bishiopPath);
+
       count++;
     }
   }
@@ -73,28 +75,28 @@ export class Bishiop {
   #bottomRightPath() {
     let { count, bishiopColor } = this.#getCountandCOlor();
 
-    // till col reaches 7  increase the row uptp 7 (bottom right side)
     for (let movePath = this.row + 1; movePath <= 7; movePath++) {
-      if (this.col + count > 7) {
-        break;
-      }
+      if (this.col + count > 7) break;
+
       let currentRightSquare = this.board[movePath][this.col + count];
 
-      if (currentRightSquare === null)
+      if (currentRightSquare === null) {
         this.bishiopPath.push([movePath, this.col + count]);
-      else if (
+      } else if (
         currentRightSquare.color !== bishiopColor &&
         currentRightSquare.name[1] === "K"
-      )
+      ) {
+        this.attackedSquare.push([movePath, this.col + count]);
         this.bishiopPath.push([movePath, this.col + count]);
-      else if (currentRightSquare.color !== bishiopColor) {
+        break;
+      } else if (currentRightSquare.color !== bishiopColor) {
         this.bishiopPath.push([movePath, this.col + count]);
         break;
       } else {
-        this.attackedSquare.push([movePath, this.col + count]);
-        this.attackedSquare.push(...this.bishiopPath);
         break;
       }
+      this.attackedSquare.push(...this.bishiopPath);
+
       count++;
     }
   }
@@ -102,28 +104,28 @@ export class Bishiop {
   #bottomLeftPath() {
     let { count, bishiopColor } = this.#getCountandCOlor();
 
-    // till col reaches 0  increase the row uptp 7 (bottom left side)
     for (let movePath = this.row + 1; movePath <= 7; movePath++) {
-      if (this.col - count < 0) {
-        break;
-      }
+      if (this.col - count < 0) break;
+
       let currentLeftSquare = this.board[movePath][this.col - count];
 
-      if (currentLeftSquare === null)
+      if (currentLeftSquare === null) {
         this.bishiopPath.push([movePath, this.col - count]);
-      else if (
+      } else if (
         currentLeftSquare.color !== bishiopColor &&
         currentLeftSquare.name[1] === "K"
-      )
+      ) {
+        this.attackedSquare.push([movePath, this.col - count]);
         this.bishiopPath.push([movePath, this.col - count]);
-      else if (currentLeftSquare.color !== bishiopColor) {
+
+        break;
+      } else if (currentLeftSquare.color !== bishiopColor) {
         this.bishiopPath.push([movePath, this.col - count]);
         break;
       } else {
-        this.attackedSquare.push([movePath, this.col - count]);
-        this.attackedSquare.push(...this.bishiopPath);
         break;
       }
+      this.attackedSquare.push(...this.bishiopPath);
       count++;
     }
   }
@@ -136,43 +138,51 @@ export class Bishiop {
     this.#topRightPath();
     this.#bottomLeftPath();
     this.#bottomRightPath();
+
+    // create set for quick move check
+    this.bishiopPathSet = new Set(
+      this.bishiopPath.map(([row, col]) => `${row},${col}`),
+    );
   }
 
   getAttackSquares() {
     this.#availablePath();
-
     return this.attackedSquare;
   }
 
   #move(fromRow, fromCol, toRow, toCol) {
-    if (!this.board.__board__.isTurn(this.color)) {
-      // console.log("Not your turn!");
-      return false;
+    if (!this.board.__board__.isTurn(this.color)) return false;
+
+    const target = this.board[toRow][toCol];
+    if (target) {
+      // Capture enemy piece
+      this.board[toRow][toCol] = null;
     }
 
     const bishiop = this.board[fromRow][fromCol];
     this.board[toRow][toCol] = bishiop;
     this.board[fromRow][fromCol] = null;
+
     this.row = toRow;
     this.col = toCol;
 
+    if (this.board.__board__.recordMove) {
+      this.board.__board__.recordMove(bishiop, fromRow, fromCol, toRow, toCol);
+    }
+
     this.board.__board__.switchTurn();
   }
+
   move(toRow, toCol) {
     this.#availablePath();
-    this.bishiopPathSet = new Set(
-      this.bishiopPath.map(([row, col]) => `${row},${col}`),
-    );
-    if (this.bishiopPathSet.has(`${toRow},${toCol}`))
+    if (this.bishiopPathSet.has(`${toRow},${toCol}`)) {
       this.#move(this.row, this.col, toRow, toCol);
-
+    }
     return this.show();
   }
+
   show() {
     this.#availablePath();
-    this.bishiopPathSet = new Set(
-      this.bishiopPath.map(([row, col]) => `${row},${col}`),
-    );
     return this.bishiopPath;
   }
 }

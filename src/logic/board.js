@@ -7,6 +7,7 @@ export class Board {
     this.initializeBoard();
     this.lastMove = null;
     this.turn = "w";
+    this.pendingPromotion = null;
   }
 
   initializeBoard() {
@@ -58,7 +59,29 @@ export class Board {
     return this.board;
   }
 
-  onClick(piece) {
-    console.log(piece);
+  promotePawn(row, col, PieceClass) {
+    const pawn = this.board[row][col]; // ← Get the pawn that's currently on the promotion square
+    console.log(pawn);
+
+    if (!pawn || pawn.type !== "pawn") {
+      console.error("No pawn found for promotion at", row, col);
+      return;
+    }
+
+    const color = pawn.color;
+    const pieceKey = color + PieceClass.name[0].toUpperCase();
+
+    // Replace the pawn with the new piece
+    this.board[row][col] = new PieceClass(
+      color,
+      row,
+      col,
+      this.board,
+      pieceKey,
+    );
+    console.log(pieceKey, PieceClass.name, this.board[row][col]);
+
+    this.pendingPromotion = null;
+    this.switchTurn();
   }
 }

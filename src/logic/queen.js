@@ -8,6 +8,7 @@ export class Queen {
     this.queenPath = [];
     this.attackedSquare = [];
   }
+
   #getColorAndCount() {
     return { count: 1, queenColor: this.color };
   }
@@ -15,56 +16,37 @@ export class Queen {
   #topLeftPath() {
     let { count, queenColor } = this.#getColorAndCount();
 
-    // till col reaches 0  decrease the row upto 0 (top left side)
-    for (let movePath = this.row - 1; movePath >= 0; movePath--) {
-      if (this.col - count < 0) {
-        break;
-      }
-      let currentLeftSquare = this.board[movePath][this.col - count];
+    for (let r = this.row - 1; r >= 0; r--) {
+      if (this.col - count < 0) break;
+      let square = this.board[r][this.col - count];
 
-      if (currentLeftSquare === null)
-        this.queenPath.push([movePath, this.col - count]);
-      else if (
-        currentLeftSquare.color !== queenColor &&
-        currentLeftSquare.name[1] === "K"
-      )
-        this.queenPath.push([movePath, this.col - count]);
-      else if (currentLeftSquare.color !== queenColor) {
-        this.queenPath.push([movePath, this.col - count]);
+      if (!square) this.queenPath.push([r, this.col - count]);
+      else if (square.color !== queenColor) {
+        this.queenPath.push([r, this.col - count]);
+        if (square.name[1] !== "K")
+          this.attackedSquare.push([r, this.col - count]);
         break;
-      } else {
-        this.attackedSquare.push(...this.queenPath);
-        this.attackedSquare.push([movePath, this.col - count]);
-        break;
-      }
+      } else break; // blocked by own piece
+      this.attackedSquare.push(...this.queenPath);
       count++;
     }
   }
+
   #topRightPath() {
     let { count, queenColor } = this.#getColorAndCount();
 
-    // till col reaches 7  decrease the row upto 0 (top right side)
-    for (let movePath = this.row - 1; movePath >= 0; movePath--) {
-      if (this.col + count > 7) {
-        break;
-      }
-      let currentRightSquare = this.board[movePath][this.col + count];
+    for (let r = this.row - 1; r >= 0; r--) {
+      if (this.col + count > 7) break;
+      let square = this.board[r][this.col + count];
 
-      if (currentRightSquare === null)
-        this.queenPath.push([movePath, this.col + count]);
-      else if (
-        currentRightSquare.color !== queenColor &&
-        currentRightSquare.name[1] === "K"
-      )
-        this.queenPath.push([movePath, this.col + count]);
-      else if (currentRightSquare.color !== queenColor) {
-        this.queenPath.push([movePath, this.col + count]);
+      if (!square) this.queenPath.push([r, this.col + count]);
+      else if (square.color !== queenColor) {
+        this.queenPath.push([r, this.col + count]);
+        if (square.name[1] !== "K")
+          this.attackedSquare.push([r, this.col + count]);
         break;
-      } else {
-        this.attackedSquare.push([movePath, this.col + count]);
-        this.attackedSquare.push(...this.queenPath);
-        break;
-      }
+      } else break;
+      this.attackedSquare.push(...this.queenPath);
       count++;
     }
   }
@@ -72,28 +54,18 @@ export class Queen {
   #bottomRightPath() {
     let { count, queenColor } = this.#getColorAndCount();
 
-    // till col reaches 7  increase the row uptp 7 (bottom right side)
-    for (let movePath = this.row + 1; movePath <= 7; movePath++) {
-      if (this.col + count > 7) {
-        break;
-      }
-      let currentRightSquare = this.board[movePath][this.col + count];
+    for (let r = this.row + 1; r <= 7; r++) {
+      if (this.col + count > 7) break;
+      let square = this.board[r][this.col + count];
 
-      if (currentRightSquare === null)
-        this.queenPath.push([movePath, this.col + count]);
-      else if (
-        currentRightSquare.color !== queenColor &&
-        currentRightSquare.name[1] === "K"
-      )
-        this.queenPath.push([movePath, this.col + count]);
-      else if (currentRightSquare.color !== queenColor) {
-        this.queenPath.push([movePath, this.col + count]);
+      if (!square) this.queenPath.push([r, this.col + count]);
+      else if (square.color !== queenColor) {
+        this.queenPath.push([r, this.col + count]);
+        if (square.name[1] !== "K")
+          this.attackedSquare.push([r, this.col + count]);
         break;
-      } else {
-        this.attackedSquare.push([movePath, this.col + count]);
-        this.attackedSquare.push(...this.queenPath);
-        break;
-      }
+      } else break;
+      this.attackedSquare.push(...this.queenPath);
       count++;
     }
   }
@@ -101,124 +73,93 @@ export class Queen {
   #bottomLeftPath() {
     let { count, queenColor } = this.#getColorAndCount();
 
-    // till col reaches 0  increase the row uptp 7 (bottom left side)
-    for (let movePath = this.row + 1; movePath <= 7; movePath++) {
-      if (this.col - count < 0) {
-        break;
-      }
-      let currentLeftSquare = this.board[movePath][this.col - count];
+    for (let r = this.row + 1; r <= 7; r++) {
+      if (this.col - count < 0) break;
+      let square = this.board[r][this.col - count];
 
-      if (currentLeftSquare === null)
-        this.queenPath.push([movePath, this.col - count]);
-      else if (
-        currentLeftSquare.color !== queenColor &&
-        currentLeftSquare.name[1] === "K"
-      )
-        this.queenPath.push([movePath, this.col - count]);
-      else if (currentLeftSquare.color !== queenColor) {
-        this.queenPath.push([movePath, this.col - count]);
+      if (!square) this.queenPath.push([r, this.col - count]);
+      else if (square.color !== queenColor) {
+        this.queenPath.push([r, this.col - count]);
+        if (square.name[1] !== "K")
+          this.attackedSquare.push([r, this.col - count]);
         break;
-      } else {
-        this.attackedSquare.push([movePath, this.col - count]);
-        this.attackedSquare.push(...this.queenPath);
-        break;
-      }
-
+      } else break;
+      this.attackedSquare.push(...this.queenPath);
       count++;
     }
   }
 
   #verticalUp() {
-    // UP
     const { queenColor } = this.#getColorAndCount();
-    for (let movePath = this.row - 1; movePath >= 0; movePath--) {
-      const square = this.board[movePath][this.col];
-      if (square === null) this.queenPath.push([movePath, this.col]);
-      else if (square.color !== queenColor && square.name[1] === "K")
-        this.queenPath.push([movePath, this.col]);
+    for (let r = this.row - 1; r >= 0; r--) {
+      let square = this.board[r][this.col];
+      if (!square) this.queenPath.push([r, this.col]);
       else if (square.color !== queenColor) {
-        // stop after capturing enemy piece
-        this.queenPath.push([movePath, this.col]);
-        break; // stop after capturing
-      } else {
-        this.attackedSquare.push(...this.queenPath);
-        this.attackedSquare.push([movePath, this.col]);
-        break; // same color piece}
-      }
+        this.queenPath.push([r, this.col]);
+        if (square.name[1] !== "K") this.attackedSquare.push([r, this.col]);
+        break;
+      } else break;
     }
   }
 
   #verticalDown() {
-    // DOWN
     const { queenColor } = this.#getColorAndCount();
-    for (let movePath = this.row + 1; movePath < 8; movePath++) {
-      const square = this.board[movePath][this.col];
-      if (square === null) this.queenPath.push([movePath, this.col]);
-      else if (square.color !== queenColor && square.name[1] === "K")
-        this.queenPath.push([movePath, this.col]);
+    for (let r = this.row + 1; r <= 7; r++) {
+      let square = this.board[r][this.col];
+      if (!square) this.queenPath.push([r, this.col]);
       else if (square.color !== queenColor) {
-        this.queenPath.push([movePath, this.col]);
+        this.queenPath.push([r, this.col]);
+        if (square.name[1] !== "K") this.attackedSquare.push([r, this.col]);
         break;
-      } else {
-        this.attackedSquare.push(...this.queenPath);
-        this.attackedSquare.push([movePath, this.col]);
-        break; // same color piece}
-      }
+      } else break;
     }
   }
 
   #horizontalLeft() {
-    // LEFT
     const { queenColor } = this.#getColorAndCount();
-    for (let movePath = this.col - 1; movePath >= 0; movePath--) {
-      const square = this.board[this.row][movePath];
-      if (square === null) this.queenPath.push([this.row, movePath]);
-      else if (square.color !== queenColor && square.name[1] === "K")
-        this.queenPath.push([this.row, movePath]);
+    for (let c = this.col - 1; c >= 0; c--) {
+      let square = this.board[this.row][c];
+      if (!square) this.queenPath.push([this.row, c]);
       else if (square.color !== queenColor) {
-        this.queenPath.push([this.row, movePath]);
+        this.queenPath.push([this.row, c]);
+        if (square.name[1] !== "K") this.attackedSquare.push([this.row, c]);
         break;
-      } else {
-        this.attackedSquare.push(...this.queenPath);
-        this.attackedSquare.push([this.row, movePath]);
-        break; // same color piece}
-      }
+      } else break;
     }
   }
 
   #horizontalRight() {
-    // RIGHT
     const { queenColor } = this.#getColorAndCount();
-    for (let movePath = this.col + 1; movePath < 8; movePath++) {
-      const square = this.board[this.row][movePath];
-      if (square === null) this.queenPath.push([this.row, movePath]);
-      else if (square.color !== queenColor && square.name[1] === "K")
-        this.queenPath.push([this.row, movePath]);
+    for (let c = this.col + 1; c <= 7; c++) {
+      let square = this.board[this.row][c];
+      if (!square) this.queenPath.push([this.row, c]);
       else if (square.color !== queenColor) {
-        this.queenPath.push([this.row, movePath]);
+        this.queenPath.push([this.row, c]);
+        if (square.name[1] !== "K") this.attackedSquare.push([this.row, c]);
         break;
-      } else {
-        this.attackedSquare.push(...this.queenPath);
-        this.attackedSquare.push([this.row, movePath]);
-        break; // same color piece}
-      }
+      } else break;
     }
   }
 
+  // ------------------ Available Paths ------------------
   #availablePaths() {
     this.queenPath = [];
     this.attackedSquare = [];
-    // bishiop movement of queen (diagonals)
+
+    // Diagonal moves
     this.#topLeftPath();
     this.#topRightPath();
     this.#bottomLeftPath();
     this.#bottomRightPath();
 
-    // for rook movement of queen (vertical and horizontal)
+    // Straight moves
     this.#verticalUp();
     this.#verticalDown();
     this.#horizontalLeft();
     this.#horizontalRight();
+
+    // build set for move checking
+    this.queenPathSet = new Set(this.queenPath.map(([r, c]) => `${r},${c}`));
   }
 
   getAttackSquares() {
@@ -226,34 +167,33 @@ export class Queen {
     return this.attackedSquare;
   }
 
+  // ------------------ Move ------------------
   #move(fromRow, fromCol, toRow, toCol) {
-    if (!this.board.__board__.isTurn(this.color)) {
-      // console.log("Not your turn!");
-      return false;
-    }
+    if (!this.board.__board__.isTurn(this.color)) return false;
+
+    const target = this.board[toRow][toCol];
+    if (target) this.board[toRow][toCol] = null; // capture enemy
 
     const queen = this.board[fromRow][fromCol];
     this.board[toRow][toCol] = queen;
     this.board[fromRow][fromCol] = null;
+
     this.row = toRow;
     this.col = toCol;
 
     this.board.__board__.switchTurn();
   }
+
   move(toRow, toCol) {
     this.#availablePaths();
-    this.queenPathSet = new Set(
-      this.queenPath.map(([row, col]) => `${row},${col}`),
-    );
-    if (this.queenPathSet.has(`${toRow},${toCol}`))
+    if (this.queenPathSet.has(`${toRow},${toCol}`)) {
       this.#move(this.row, this.col, toRow, toCol);
+    }
+    return this.show();
   }
+
   show() {
     this.#availablePaths();
-    this.queenPathSet = new Set(
-      this.queenPath.map(([row, col]) => `${row},${col}`),
-    );
-    // console.log(this.queenPathSet);
     return this.queenPath;
   }
 }

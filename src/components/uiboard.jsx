@@ -9,6 +9,10 @@ import ChessBishopFilledIcon from "../assets/bishiop";
 import ChessQueenIcon from "../assets/queen";
 import ChessKingFilledIcon from "../assets/king";
 import dayjs from "dayjs";
+import { Queen } from "../logic/queen";
+import { Bishiop } from "../logic/bishop";
+import Rook from "../logic/rook";
+import Knight from "../logic/knight";
 
 const blackColor = "#343434ff";
 const whiteColor = "#BDBDBD";
@@ -40,6 +44,9 @@ export default function UIBoard() {
   );
   const [isRunning, setIsRunning] = useState(true);
   const [gameOver, setGameOver] = useState(false);
+  const [promotionUI, setPromotionUI] = useState(null);
+
+  let promotionColor = currentTurn === "w" ? "white" : "black";
 
   // to stop the game when its over
   useEffect(() => {
@@ -61,7 +68,13 @@ export default function UIBoard() {
     return () => clearInterval(timer);
   }, [currentTurn, isRunning]);
 
+  useEffect(() => {
+    setPromotionUI(gameBoard.board.__board__.pendingPromotion);
+  }, [gameBoard.board.__board__.pendingPromotion]);
+
   const handleSquareClick = (r, c) => {
+    if (promotionUI) return;
+
     const clickedPiece = gameBoard.board[r][c];
 
     if (!selectedPiece) {
@@ -100,7 +113,51 @@ export default function UIBoard() {
     dayjs().startOf("day").second(seconds).format("mm:ss");
 
   return (
-    <Box sx={{ display: "grid" }}>
+    <Box sx={{ display: "grid", position: "relative" }}>
+      {promotionUI && (
+        <Box
+          sx={{
+            position: "fixed",
+            inset: 0,
+            background: "rgba(0,0,0,0.6)",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            zIndex: 2000,
+          }}
+        >
+          {[
+            <ChessQueenIcon color={promotionColor} />,
+            <ChessRookFilledIcon color={promotionColor} />,
+            <ChessBishopFilledIcon color={promotionColor} />,
+            <ChessKnightFilledIcon color={promotionColor} />,
+          ].map((p, index) => (
+            <Button
+              key={index}
+              sx={{
+                margin: 1,
+                backgroundColor: "red",
+                minWidth: 60,
+                minHeight: 60,
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+              }}
+              onClick={() => {
+                const { row, col } = promotionUI;
+                const pieces = [Queen, Rook, Bishiop, Knight];
+                gameBoard.board.__board__.promotePawn(row, col, pieces[index]);
+
+                setCurrentTurn(gameBoard.board.__board__.turn); // read from board
+                setPromotionUI(null);
+              }}
+            >
+              {p}
+            </Button>
+          ))}
+        </Box>
+      )}
+
       <Box
         sx={{
           fontWeight: "bold",
@@ -110,6 +167,7 @@ export default function UIBoard() {
           margin: 0,
         }}
       >
+        {/** shows black timer */}
         <Box
           sx={{
             background: "red",
@@ -139,6 +197,8 @@ export default function UIBoard() {
           </Box>
         </Box>
       </Box>
+
+      {/**  game board of 8x8 */}
       {gameBoard.board.map((rows, r) => (
         <Box key={r} sx={{ display: "flex" }}>
           {rows.map((i, c) => {
@@ -162,7 +222,7 @@ export default function UIBoard() {
                   {Icon && <Icon size={100} />}
                   {movablePaths?.some(
                     ([row, col]) => row === r && col === c,
-                  ) && (
+                  ) && ( // displays the movable path of the piece as a orange dot
                     <Box
                       sx={{
                         position: "absolute",
@@ -197,6 +257,8 @@ export default function UIBoard() {
           })}
         </Box>
       ))}
+
+      {/** shows white timer */}
       <Box
         sx={{
           fontWeight: "bold",
@@ -234,6 +296,7 @@ export default function UIBoard() {
           </Box>
         </Box>
       </Box>
+      {/** displays the turn of player */}
       <Box
         sx={{
           fontWeight: "bold",

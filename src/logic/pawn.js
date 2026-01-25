@@ -1,5 +1,5 @@
 export default class Pawn {
-  constructor(type = "Pawn", color, row, col, board, name) {
+  constructor(type = "pawn", color, row, col, board, name) {
     this.name = name;
     this.type = type;
     this.color = color;
@@ -91,11 +91,19 @@ export default class Pawn {
     return this.attackedSquare;
   }
 
+  #isPromotionRank() {
+    return (
+      (this.color === "w" && this.row === 0) ||
+      (this.color === "b" && this.row === 7)
+    );
+  }
+
   #move(fromRow, fromCol, toRow, toCol) {
     if (!this.board.__board__.isTurn(this.color)) return false;
 
     const pawn = this.board[fromRow][fromCol];
 
+    // enpassant
     if (fromCol !== toCol && !this.board[toRow][toCol]) {
       const capturedPawnRow = toRow - this.direction;
       this.board[capturedPawnRow][toCol] = null;
@@ -107,6 +115,16 @@ export default class Pawn {
     this.col = toCol;
 
     this.board.__board__.recordMove(pawn, fromRow, fromCol, toRow, toCol);
+
+    if (this.#isPromotionRank()) {
+      this.board.__board__.pendingPromotion = {
+        row: this.row,
+        col: this.col,
+        color: this.color,
+      };
+      return;
+    }
+
     this.board.__board__.switchTurn();
   }
 
