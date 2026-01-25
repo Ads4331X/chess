@@ -4,7 +4,7 @@ export default class Knight {
     this.row = row;
     this.col = col;
     this.board = board;
-    this.name = name;
+    this.name = this.color + "H" || name;
     this.knightPath = [];
     this.attackedSquare = [];
   }
