@@ -7,19 +7,20 @@ export default class Pawn {
     this.col = col;
     this.board = board;
     this.pawnPath = [];
-    this.attackedSquare = [];
-    this.direction = 0;
+    this.direction = color === "b" ? 1 : -1;
   }
 
   #isValid(pos) {
     return pos >= 0 && pos <= 7;
   }
 
-  #canMove2Step(row, pawnColor) {
-    return (row === 1 && pawnColor === "b") || (row === 6 && pawnColor === "w");
+  #canMove2Step(row) {
+    return (
+      (row === 1 && this.color === "b") || (row === 6 && this.color === "w")
+    );
   }
 
-  #checkEnpassan() {
+  #checkEnpassant() {
     const lastMove = this.board.__board__.lastMove;
     if (!lastMove) return;
 
@@ -46,13 +47,7 @@ export default class Pawn {
 
   #availablePath() {
     this.pawnPath = [];
-    this.attackedSquare = [];
 
-    const pawnColor = this.color;
-    const piece = this.board[this.row][this.col];
-    if (!piece) return;
-
-    this.direction = pawnColor === "b" ? 1 : -1;
     const nextRow = this.row + this.direction;
 
     // Single step forward
@@ -62,7 +57,7 @@ export default class Pawn {
       // Double step forward
       const twoStepsRow = this.row + 2 * this.direction;
       if (
-        this.#canMove2Step(this.row, pawnColor) &&
+        this.#canMove2Step(this.row) &&
         this.#isValid(twoStepsRow) &&
         !this.board[twoStepsRow][this.col]
       ) {
@@ -70,25 +65,31 @@ export default class Pawn {
       }
     }
 
-    // Diagonal attack squares (attacked by pawn)
-    const diagonals = [this.col - 1, this.col + 1];
-    for (const c of diagonals) {
+    // Captures
+    for (const c of [this.col - 1, this.col + 1]) {
       if (!this.#isValid(c) || !this.#isValid(nextRow)) continue;
 
-      // Always mark diagonals as attacked
-      this.attackedSquare.push([nextRow, c]);
-
       const diagSquare = this.board[nextRow][c];
-      if (diagSquare && diagSquare.color !== pawnColor) {
-        this.pawnPath.push([nextRow, c]); // can capture
+      if (diagSquare && diagSquare.color !== this.color) {
+        this.pawnPath.push([nextRow, c]);
       }
     }
-    this.#checkEnpassan();
+
+    // en passant
+    this.#checkEnpassant();
   }
 
+  // Attack squares for check detection
   getAttackSquares() {
-    this.#availablePath();
-    return this.attackedSquare;
+    const attacks = [];
+    const nextRow = this.row + this.direction;
+
+    for (const c of [this.col - 1, this.col + 1]) {
+      if (!this.#isValid(c) || !this.#isValid(nextRow)) continue;
+      attacks.push([nextRow, c]);
+    }
+
+    return attacks;
   }
 
   #isPromotionRank() {
@@ -103,7 +104,7 @@ export default class Pawn {
 
     const pawn = this.board[fromRow][fromCol];
 
-    // enpassant
+    // en passant capture
     if (fromCol !== toCol && !this.board[toRow][toCol]) {
       const capturedPawnRow = toRow - this.direction;
       this.board[capturedPawnRow][toCol] = null;
@@ -149,6 +150,7 @@ export default class Pawn {
     }
     return this.show();
   }
+
   show() {
     this.#availablePath();
     return this.pawnPath;

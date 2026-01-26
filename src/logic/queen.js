@@ -20,14 +20,18 @@ export class Queen {
       if (this.col - count < 0) break;
       let square = this.board[r][this.col - count];
 
-      if (!square) this.queenPath.push([r, this.col - count]);
-      else if (square.color !== queenColor) {
+      if (!square) {
         this.queenPath.push([r, this.col - count]);
-        if (square.name[1] !== "K")
-          this.attackedSquare.push([r, this.col - count]);
+        this.attackedSquare.push([r, this.col - count]);
+      } else if (square.color !== queenColor) {
+        this.queenPath.push([r, this.col - count]);
+        this.attackedSquare.push([r, this.col - count]);
         break;
-      } else break; // blocked by own piece
-      this.attackedSquare.push(...this.queenPath);
+      } else {
+        this.attackedSquare.push([r, this.col - count]); // PROTECT
+        break;
+      }
+
       count++;
     }
   }
@@ -39,14 +43,18 @@ export class Queen {
       if (this.col + count > 7) break;
       let square = this.board[r][this.col + count];
 
-      if (!square) this.queenPath.push([r, this.col + count]);
-      else if (square.color !== queenColor) {
+      if (!square) {
         this.queenPath.push([r, this.col + count]);
-        if (square.name[1] !== "K")
-          this.attackedSquare.push([r, this.col + count]);
+        this.attackedSquare.push([r, this.col + count]);
+      } else if (square.color !== queenColor) {
+        this.queenPath.push([r, this.col + count]);
+        this.attackedSquare.push([r, this.col + count]);
         break;
-      } else break;
-      this.attackedSquare.push(...this.queenPath);
+      } else {
+        this.attackedSquare.push([r, this.col + count]); // PROTECT
+        break;
+      }
+
       count++;
     }
   }
@@ -58,14 +66,18 @@ export class Queen {
       if (this.col + count > 7) break;
       let square = this.board[r][this.col + count];
 
-      if (!square) this.queenPath.push([r, this.col + count]);
-      else if (square.color !== queenColor) {
+      if (!square) {
         this.queenPath.push([r, this.col + count]);
-        if (square.name[1] !== "K")
-          this.attackedSquare.push([r, this.col + count]);
+        this.attackedSquare.push([r, this.col + count]);
+      } else if (square.color !== queenColor) {
+        this.queenPath.push([r, this.col + count]);
+        this.attackedSquare.push([r, this.col + count]);
         break;
-      } else break;
-      this.attackedSquare.push(...this.queenPath);
+      } else {
+        this.attackedSquare.push([r, this.col + count]); // PROTECT
+        break;
+      }
+
       count++;
     }
   }
@@ -77,14 +89,18 @@ export class Queen {
       if (this.col - count < 0) break;
       let square = this.board[r][this.col - count];
 
-      if (!square) this.queenPath.push([r, this.col - count]);
-      else if (square.color !== queenColor) {
+      if (!square) {
         this.queenPath.push([r, this.col - count]);
-        if (square.name[1] !== "K")
-          this.attackedSquare.push([r, this.col - count]);
+        this.attackedSquare.push([r, this.col - count]);
+      } else if (square.color !== queenColor) {
+        this.queenPath.push([r, this.col - count]);
+        this.attackedSquare.push([r, this.col - count]);
         break;
-      } else break;
-      this.attackedSquare.push(...this.queenPath);
+      } else {
+        this.attackedSquare.push([r, this.col - count]); // PROTECT
+        break;
+      }
+
       count++;
     }
   }
@@ -93,12 +109,17 @@ export class Queen {
     const { queenColor } = this.#getColorAndCount();
     for (let r = this.row - 1; r >= 0; r--) {
       let square = this.board[r][this.col];
-      if (!square) this.queenPath.push([r, this.col]);
-      else if (square.color !== queenColor) {
+      if (!square) {
         this.queenPath.push([r, this.col]);
-        if (square.name[1] !== "K") this.attackedSquare.push([r, this.col]);
+        this.attackedSquare.push([r, this.col]);
+      } else if (square.color !== queenColor) {
+        this.queenPath.push([r, this.col]);
+        this.attackedSquare.push([r, this.col]);
         break;
-      } else break;
+      } else {
+        this.attackedSquare.push([r, this.col]); // PROTECT
+        break;
+      }
     }
   }
 
@@ -106,12 +127,17 @@ export class Queen {
     const { queenColor } = this.#getColorAndCount();
     for (let r = this.row + 1; r <= 7; r++) {
       let square = this.board[r][this.col];
-      if (!square) this.queenPath.push([r, this.col]);
-      else if (square.color !== queenColor) {
+      if (!square) {
         this.queenPath.push([r, this.col]);
-        if (square.name[1] !== "K") this.attackedSquare.push([r, this.col]);
+        this.attackedSquare.push([r, this.col]);
+      } else if (square.color !== queenColor) {
+        this.queenPath.push([r, this.col]);
+        this.attackedSquare.push([r, this.col]);
         break;
-      } else break;
+      } else {
+        this.attackedSquare.push([r, this.col]); // PROTECT
+        break;
+      }
     }
   }
 
@@ -119,12 +145,17 @@ export class Queen {
     const { queenColor } = this.#getColorAndCount();
     for (let c = this.col - 1; c >= 0; c--) {
       let square = this.board[this.row][c];
-      if (!square) this.queenPath.push([this.row, c]);
-      else if (square.color !== queenColor) {
+      if (!square) {
         this.queenPath.push([this.row, c]);
-        if (square.name[1] !== "K") this.attackedSquare.push([this.row, c]);
+        this.attackedSquare.push([this.row, c]);
+      } else if (square.color !== queenColor) {
+        this.queenPath.push([this.row, c]);
+        this.attackedSquare.push([this.row, c]);
         break;
-      } else break;
+      } else {
+        this.attackedSquare.push([this.row, c]); // PROTECT
+        break;
+      }
     }
   }
 
@@ -132,33 +163,33 @@ export class Queen {
     const { queenColor } = this.#getColorAndCount();
     for (let c = this.col + 1; c <= 7; c++) {
       let square = this.board[this.row][c];
-      if (!square) this.queenPath.push([this.row, c]);
-      else if (square.color !== queenColor) {
+      if (!square) {
         this.queenPath.push([this.row, c]);
-        if (square.name[1] !== "K") this.attackedSquare.push([this.row, c]);
+        this.attackedSquare.push([this.row, c]);
+      } else if (square.color !== queenColor) {
+        this.queenPath.push([this.row, c]);
+        this.attackedSquare.push([this.row, c]);
         break;
-      } else break;
+      } else {
+        this.attackedSquare.push([this.row, c]); // PROTECT
+        break;
+      }
     }
   }
 
-  // ------------------ Available Paths ------------------
   #availablePaths() {
     this.queenPath = [];
     this.attackedSquare = [];
 
-    // Diagonal moves
     this.#topLeftPath();
     this.#topRightPath();
     this.#bottomLeftPath();
     this.#bottomRightPath();
-
-    // Straight moves
     this.#verticalUp();
     this.#verticalDown();
     this.#horizontalLeft();
     this.#horizontalRight();
 
-    // build set for move checking
     this.queenPathSet = new Set(this.queenPath.map(([r, c]) => `${r},${c}`));
   }
 
@@ -167,7 +198,6 @@ export class Queen {
     return this.attackedSquare;
   }
 
-  // ------------------ Move ------------------
   #move(fromRow, fromCol, toRow, toCol) {
     if (!this.board.__board__.isTurn(this.color)) return false;
 

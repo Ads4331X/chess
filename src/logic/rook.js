@@ -14,7 +14,6 @@ export default class Rook {
     this.attackedSquares = [];
     this.#rookPath();
     this.rookPathSet = new Set(this.rookPath.map(([r, c]) => `${r},${c}`));
-    // console.log(this.rookPathSet);
     return this.rookPath;
   }
 
@@ -26,73 +25,78 @@ export default class Rook {
     // UP
     for (let i = this.row - 1; i >= 0; i--) {
       const square = this.board[i][this.col];
-      if (square === null) this.rookPath.push([i, this.col]);
-      else if (square.color !== rookColor && square.name[1] === "K")
+
+      if (square === null) {
         this.rookPath.push([i, this.col]);
-      else if (square.color !== rookColor) {
-        // stop after capturing enemy piece
-        this.rookPath.push([i, this.col]);
-        break; // stop after capturing
-      } else {
-        this.attackedSquares.push(...this.rookPath);
         this.attackedSquares.push([i, this.col]);
-        break; // same color piece}
+      } else if (square.color !== rookColor) {
+        this.rookPath.push([i, this.col]);
+        this.attackedSquares.push([i, this.col]);
+        break;
+      } else {
+        this.attackedSquares.push([i, this.col]);
+        break;
       }
     }
+
     // DOWN
     for (let i = this.row + 1; i < 8; i++) {
       const square = this.board[i][this.col];
 
-      if (square === null) this.rookPath.push([i, this.col]);
-      else if (square.color !== rookColor && square.name[1] === "K")
+      if (square === null) {
         this.rookPath.push([i, this.col]);
-      else if (square.color !== rookColor) {
+        this.attackedSquares.push([i, this.col]);
+      } else if (square.color !== rookColor) {
         this.rookPath.push([i, this.col]);
+        this.attackedSquares.push([i, this.col]);
         break;
       } else {
-        this.attackedSquares.push(...this.rookPath);
         this.attackedSquares.push([i, this.col]);
-        break; // same color piece}
+        break;
       }
     }
 
     // LEFT
     for (let i = this.col - 1; i >= 0; i--) {
       const square = this.board[this.row][i];
-      if (square === null) this.rookPath.push([this.row, i]);
-      else if (square.color !== rookColor && square.name[1] === "K")
+
+      if (square === null) {
         this.rookPath.push([this.row, i]);
-      else if (square.color !== rookColor) {
+        this.attackedSquares.push([this.row, i]);
+      } else if (square.color !== rookColor) {
         this.rookPath.push([this.row, i]);
+        this.attackedSquares.push([this.row, i]);
         break;
       } else {
-        this.attackedSquares.push(...this.rookPath);
-        this.attackedSquares.push([i, this.col]);
-        break; // same color piece}
+        this.attackedSquares.push([this.row, i]);
+        break;
       }
     }
 
     // RIGHT
     for (let i = this.col + 1; i < 8; i++) {
       const square = this.board[this.row][i];
-      if (square === null) this.rookPath.push([this.row, i]);
-      else if (square.color !== rookColor && square.name[1] === "K")
+
+      if (square === null) {
         this.rookPath.push([this.row, i]);
-      else if (square.color !== rookColor) {
+        this.attackedSquares.push([this.row, i]);
+      } else if (square.color !== rookColor) {
         this.rookPath.push([this.row, i]);
+        this.attackedSquares.push([this.row, i]);
         break;
       } else {
-        this.attackedSquares.push(...this.rookPath);
-        this.attackedSquares.push([i, this.col]);
-        break; // same color piece}
+        this.attackedSquares.push([this.row, i]);
+        break;
       }
     }
   }
 
   getAttackSquares() {
-    this.#rookPath();
+    // IMPORTANT: rook attacks same squares as it can move
+    this.show();
     return this.attackedSquares;
   }
+
   move(toRow, toCol) {
     this.#rookPath();
     const movableSet = new Set(this.rookPath.map(([r, c]) => `${r},${c}`));
@@ -116,17 +120,14 @@ export default class Rook {
   }
 
   #move(fromRow, fromCol, toRow, toCol) {
-    if (!this.board.__board__.isTurn(this.color)) {
-      // console.log("Not your turn!");
-      return false;
-    }
+    if (!this.board.__board__.isTurn(this.color)) return false;
 
-    let current = this.board[fromRow][fromCol]; // rook
+    let current = this.board[fromRow][fromCol];
     if (!current) return;
-    this.board[toRow][toCol] = current; // move the rook
-    this.board[fromRow][fromCol] = null; // empty the previous sopt
-    this.row = toRow; // make the moved row the new row
-    this.col = toCol; // make the moved col the new col
+    this.board[toRow][toCol] = current;
+    this.board[fromRow][fromCol] = null;
+    this.row = toRow;
+    this.col = toCol;
 
     this.board.__board__.switchTurn();
   }

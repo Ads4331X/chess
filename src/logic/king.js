@@ -9,9 +9,11 @@ export class King {
     this.kingPath = [];
     this.legalMoves = [];
   }
+
   #isValid(check) {
     return check <= 7 && check >= 0;
   }
+
   #availablePaths() {
     this.kingPath = [];
     const kingMoveArea = [
@@ -47,15 +49,39 @@ export class King {
     );
   }
 
-  show() {
-    this.#availablePaths();
-    return this.kingPath;
+  // ✅ ADD THIS METHOD
+  getAttackSquares() {
+    const kingMoveArea = [
+      [1, 1],
+      [1, 0],
+      [1, -1],
+      [0, -1],
+      [0, 1],
+      [-1, -1],
+      [-1, 0],
+      [-1, 1],
+    ];
+
+    const attacks = [];
+
+    for (let [rOff, cOff] of kingMoveArea) {
+      const newRow = this.row + rOff;
+      const newCol = this.col + cOff;
+
+      if (newRow < 0 || newRow > 7 || newCol < 0 || newCol > 7) continue;
+      attacks.push([newRow, newCol]);
+    }
+
+    return attacks;
   }
 
-  #isCheck(toRow, toCol) {}
+  show() {
+    this.#availablePaths();
+    return this.legalMoves;
+  }
+
   #move(fromRow, fromCol, toRow, toCol) {
     if (!this.board.__board__.isTurn(this.color)) {
-      // console.log("Not your turn!");
       return false;
     }
 

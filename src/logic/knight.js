@@ -4,9 +4,9 @@ export default class Knight {
     this.row = row;
     this.col = col;
     this.board = board;
-    this.name = this.color + "H" || name;
+    this.name = name || this.color + "H";
+    this.type = "knight";
     this.knightPath = [];
-    this.attackedSquare = [];
   }
 
   #isValid(pos) {
@@ -15,8 +15,6 @@ export default class Knight {
 
   #availablePath() {
     this.knightPath = [];
-    this.attackedSquare = [];
-    const knightColor = this.color;
 
     const moves = [
       [2, 1],
@@ -36,21 +34,22 @@ export default class Knight {
       if (!this.#isValid(newRow) || !this.#isValid(newCol)) continue;
 
       const square = this.board[newRow][newCol];
-      if (!square || square.color !== knightColor) {
+      if (!square || square.color !== this.color) {
         this.knightPath.push([newRow, newCol]);
-        this.attackedSquare.push([newRow, newCol]);
-      } else if (square.color === knightColor)
-        this.attackedSquare.push([newRow, newCol]);
+      }
     }
   }
 
+  // Legal moves (considering check)
   show() {
     this.#availablePath();
     return this.knightPath;
   }
 
+  // Attack squares (independent of legality)
   getAttackSquares() {
-    return this.attackedSquare;
+    this.#availablePath();
+    return this.knightPath;
   }
 
   #move(fromRow, fromCol, toRow, toCol) {

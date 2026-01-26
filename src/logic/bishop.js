@@ -23,21 +23,17 @@ export class Bishiop {
 
       if (currentLeftSquare === null) {
         this.bishiopPath.push([movePath, this.col - count]);
-      } else if (
-        currentLeftSquare.color !== bishiopColor &&
-        currentLeftSquare.name[1] === "K"
-      ) {
         this.attackedSquare.push([movePath, this.col - count]);
-        this.bishiopPath.push([movePath, this.col - count]);
-        break;
       } else if (currentLeftSquare.color !== bishiopColor) {
+        // can capture enemy, and still attacks it
         this.bishiopPath.push([movePath, this.col - count]);
+        this.attackedSquare.push([movePath, this.col - count]);
         break;
       } else {
-        // own piece blocks path, no attacking own path
+        // own piece blocks path, but still attacked
+        this.attackedSquare.push([movePath, this.col - count]);
         break;
       }
-      this.attackedSquare.push(...this.bishiopPath);
 
       count++;
     }
@@ -53,20 +49,15 @@ export class Bishiop {
 
       if (currentRightSquare === null) {
         this.bishiopPath.push([movePath, this.col + count]);
-      } else if (
-        currentRightSquare.color !== bishiopColor &&
-        currentRightSquare.name[1] === "K"
-      ) {
         this.attackedSquare.push([movePath, this.col + count]);
-        this.bishiopPath.push([movePath, this.col + count]);
-        break;
       } else if (currentRightSquare.color !== bishiopColor) {
         this.bishiopPath.push([movePath, this.col + count]);
+        this.attackedSquare.push([movePath, this.col + count]);
         break;
       } else {
+        this.attackedSquare.push([movePath, this.col + count]);
         break;
       }
-      this.attackedSquare.push(...this.bishiopPath);
 
       count++;
     }
@@ -82,20 +73,15 @@ export class Bishiop {
 
       if (currentRightSquare === null) {
         this.bishiopPath.push([movePath, this.col + count]);
-      } else if (
-        currentRightSquare.color !== bishiopColor &&
-        currentRightSquare.name[1] === "K"
-      ) {
         this.attackedSquare.push([movePath, this.col + count]);
-        this.bishiopPath.push([movePath, this.col + count]);
-        break;
       } else if (currentRightSquare.color !== bishiopColor) {
         this.bishiopPath.push([movePath, this.col + count]);
+        this.attackedSquare.push([movePath, this.col + count]);
         break;
       } else {
+        this.attackedSquare.push([movePath, this.col + count]);
         break;
       }
-      this.attackedSquare.push(...this.bishiopPath);
 
       count++;
     }
@@ -111,21 +97,16 @@ export class Bishiop {
 
       if (currentLeftSquare === null) {
         this.bishiopPath.push([movePath, this.col - count]);
-      } else if (
-        currentLeftSquare.color !== bishiopColor &&
-        currentLeftSquare.name[1] === "K"
-      ) {
         this.attackedSquare.push([movePath, this.col - count]);
-        this.bishiopPath.push([movePath, this.col - count]);
-
-        break;
       } else if (currentLeftSquare.color !== bishiopColor) {
         this.bishiopPath.push([movePath, this.col - count]);
+        this.attackedSquare.push([movePath, this.col - count]);
         break;
       } else {
+        this.attackedSquare.push([movePath, this.col - count]);
         break;
       }
-      this.attackedSquare.push(...this.bishiopPath);
+
       count++;
     }
   }
@@ -139,7 +120,6 @@ export class Bishiop {
     this.#bottomLeftPath();
     this.#bottomRightPath();
 
-    // create set for quick move check
     this.bishiopPathSet = new Set(
       this.bishiopPath.map(([row, col]) => `${row},${col}`),
     );
@@ -147,7 +127,7 @@ export class Bishiop {
 
   getAttackSquares() {
     this.#availablePath();
-    return this.attackedSquare;
+    return this.attackedSquare; // <-- FIXED
   }
 
   #move(fromRow, fromCol, toRow, toCol) {
@@ -155,7 +135,6 @@ export class Bishiop {
 
     const target = this.board[toRow][toCol];
     if (target) {
-      // Capture enemy piece
       this.board[toRow][toCol] = null;
     }
 
