@@ -1,4 +1,5 @@
 import { Pieces } from "./pieces";
+import moveSound from "../assets/move.mp3";
 
 export class Board {
   constructor() {
@@ -32,6 +33,11 @@ export class Board {
       }
     }
     return false;
+  }
+
+  playMoveSound() {
+    const audio = new Audio(moveSound);
+    audio.play();
   }
 
   recordMove(piece, fromRow, fromCol, toRow, toCol) {

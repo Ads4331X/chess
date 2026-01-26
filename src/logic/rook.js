@@ -127,6 +127,7 @@ export default class Rook {
     this.board[fromRow][fromCol] = null;
     this.row = toRow;
     this.col = toCol;
+    this.board.__board__.playMoveSound();
 
     this.board.__board__.switchTurn();
   }

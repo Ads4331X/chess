@@ -126,6 +126,8 @@ export default class Pawn {
       return;
     }
 
+    this.board.__board__.playMoveSound();
+
     this.board.__board__.switchTurn();
   }
 
