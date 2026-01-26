@@ -186,7 +186,21 @@ export class Queen {
 
   move(toRow, toCol) {
     this.#availablePaths();
-    if (this.queenPathSet.has(`${toRow},${toCol}`)) {
+    const movableSet = new Set(this.queenPath.map(([r, c]) => `${r},${c}`));
+
+    if (movableSet.has(`${toRow},${toCol}`)) {
+      if (
+        !this.board.__board__.isLegalMove(
+          this,
+          this.row,
+          this.col,
+          toRow,
+          toCol,
+        )
+      ) {
+        return this.show();
+      }
+
       this.#move(this.row, this.col, toRow, toCol);
     }
     return this.show();

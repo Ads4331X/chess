@@ -59,9 +59,81 @@ export class Board {
     return this.board;
   }
 
+  isCheckmate(color) {
+    if (!this.isInCheck(color)) return false;
+
+    // Try all possible moves for this color
+    for (let r = 0; r < 8; r++) {
+      for (let c = 0; c < 8; c++) {
+        const piece = this.board[r][c];
+        if (!piece || piece.color !== color) continue;
+
+        const moves = piece.show();
+        for (let [toR, toC] of moves) {
+          // Test if this move gets out of check
+          if (this.isLegalMove(piece, r, c, toR, toC)) {
+            return false; // Found a legal move, not checkmate
+          }
+        }
+      }
+    }
+
+    return true; // No legal moves found
+  }
+
+  isInCheck(color) {
+    // Find the king
+    let kingRow, kingCol;
+    for (let r = 0; r < 8; r++) {
+      for (let c = 0; c < 8; c++) {
+        const piece = this.board[r][c];
+        if (piece && piece.type === "king" && piece.color === color) {
+          kingRow = r;
+          kingCol = c;
+          break;
+        }
+      }
+    }
+
+    const enemyColor = color === "w" ? "b" : "w";
+    return this.isSquareAttacked(kingRow, kingCol, enemyColor);
+  }
+
+  isLegalMove(piece, fromRow, fromCol, toRow, toCol) {
+    const captured = this.board[toRow][toCol];
+
+    // make move
+    this.board[fromRow][fromCol] = null;
+    this.board[toRow][toCol] = piece;
+    piece.row = toRow;
+    piece.col = toCol;
+
+    // find king
+    let kingRow, kingCol;
+    for (let r = 0; r < 8; r++) {
+      for (let c = 0; c < 8; c++) {
+        const p = this.board[r][c];
+        if (p && p.type === "king" && p.color === piece.color) {
+          kingRow = r;
+          kingCol = c;
+        }
+      }
+    }
+
+    const enemy = piece.color === "w" ? "b" : "w";
+    const illegal = this.isSquareAttacked(kingRow, kingCol, enemy);
+
+    // undo move
+    this.board[fromRow][fromCol] = piece;
+    this.board[toRow][toCol] = captured;
+    piece.row = fromRow;
+    piece.col = fromCol;
+
+    return !illegal;
+  }
+
   promotePawn(row, col, PieceClass) {
-    const pawn = this.board[row][col]; // ← Get the pawn that's currently on the promotion square
-    console.log(pawn);
+    const pawn = this.board[row][col]; // Get the pawn that's currently on the promotion square
 
     if (!pawn || pawn.type !== "pawn") {
       console.error("No pawn found for promotion at", row, col);
@@ -79,7 +151,6 @@ export class Board {
       this.board,
       pieceKey,
     );
-    console.log(pieceKey, PieceClass.name, this.board[row][col]);
 
     this.pendingPromotion = null;
     this.switchTurn();

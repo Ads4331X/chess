@@ -131,12 +131,24 @@ export default class Pawn {
   move(toRow, toCol) {
     this.#availablePath();
     const movableSet = new Set(this.pawnPath.map(([r, c]) => `${r},${c}`));
+
     if (movableSet.has(`${toRow},${toCol}`)) {
+      if (
+        !this.board.__board__.isLegalMove(
+          this,
+          this.row,
+          this.col,
+          toRow,
+          toCol,
+        )
+      ) {
+        return this.show();
+      }
+
       this.#move(this.row, this.col, toRow, toCol);
     }
     return this.show();
   }
-
   show() {
     this.#availablePath();
     return this.pawnPath;

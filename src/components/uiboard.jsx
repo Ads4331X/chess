@@ -14,6 +14,8 @@ import { Bishiop } from "../logic/bishop";
 import Rook from "../logic/rook";
 import Knight from "../logic/knight";
 
+import Modal from "@mui/material/Modal";
+
 const blackColor = "#343434ff";
 const whiteColor = "#BDBDBD";
 const icons = {
@@ -36,7 +38,7 @@ export default function UIBoard() {
   const [movablePaths, setMovablePath] = useState([]);
   const [selectedPiece, setSelectedPiece] = useState(null);
 
-  const timeLimit = 5 * 60; // 5 minutes in seconds
+  const timeLimit = 0.1 * 60; // 5 minutes in seconds
   const [whiteRemaining, setWhiteRemaining] = useState(timeLimit);
   const [blackRemaining, setBlackRemaining] = useState(timeLimit);
   const [currentTurn, setCurrentTurn] = useState(
@@ -45,17 +47,32 @@ export default function UIBoard() {
   const [isRunning, setIsRunning] = useState(true);
   const [gameOver, setGameOver] = useState(false);
   const [promotionUI, setPromotionUI] = useState(null);
+  const [checkStatus, setCheckStatus] = useState("");
 
   let promotionColor = currentTurn === "w" ? "white" : "black";
 
-  // to stop the game when its over
+  // Check for check/checkmate after each move
   useEffect(() => {
-    if (whiteRemaining <= 0 || blackRemaining <= 0) setGameOver(true);
+    if (gameBoard.board.__board__.isCheckmate(currentTurn)) {
+      setCheckStatus("CHECKMATE!");
+      setGameOver(true);
+    } else if (gameBoard.board.__board__.isInCheck(currentTurn)) {
+      setCheckStatus("CHECK");
+    } else {
+      setCheckStatus("");
+    }
+  }, [currentTurn, gameBoard]);
+
+  // Stop the game when time runs out
+  useEffect(() => {
+    if (whiteRemaining <= 0 || blackRemaining <= 0) {
+      setGameOver(true);
+    }
   }, [whiteRemaining, blackRemaining]);
 
   // Tick timer every second
   useEffect(() => {
-    if (!isRunning) return;
+    if (!isRunning || gameOver) return;
 
     const timer = setInterval(() => {
       if (currentTurn === "w") {
@@ -66,7 +83,7 @@ export default function UIBoard() {
     }, 1000);
 
     return () => clearInterval(timer);
-  }, [currentTurn, isRunning]);
+  }, [currentTurn, isRunning, gameOver]);
 
   useEffect(() => {
     setPromotionUI(gameBoard.board.__board__.pendingPromotion);
@@ -82,13 +99,39 @@ export default function UIBoard() {
       if (!gameBoard.board.__board__.isTurn(clickedPiece.color)) return;
 
       setSelectedPiece(clickedPiece);
-      setMovablePath(clickedPiece.show());
+
+      // Filter out illegal moves that would leave king in check
+      const allPaths = clickedPiece.show();
+      const legalPaths = allPaths.filter(([toRow, toCol]) =>
+        gameBoard.board.__board__.isLegalMove(
+          clickedPiece,
+          clickedPiece.row,
+          clickedPiece.col,
+          toRow,
+          toCol,
+        ),
+      );
+
+      setMovablePath(legalPaths);
       return;
     }
 
     if (clickedPiece && clickedPiece.color === selectedPiece.color) {
       setSelectedPiece(clickedPiece);
-      setMovablePath(clickedPiece.show());
+
+      // Filter out illegal moves that would leave king in check
+      const allPaths = clickedPiece.show();
+      const legalPaths = allPaths.filter(([toRow, toCol]) =>
+        gameBoard.board.__board__.isLegalMove(
+          clickedPiece,
+          clickedPiece.row,
+          clickedPiece.col,
+          toRow,
+          toCol,
+        ),
+      );
+
+      setMovablePath(legalPaths);
       return;
     }
 
@@ -113,7 +156,13 @@ export default function UIBoard() {
     dayjs().startOf("day").second(seconds).format("mm:ss");
 
   return (
-    <Box sx={{ display: "grid", position: "relative" }}>
+    <Box
+      sx={{
+        display: "grid",
+        position: "relative",
+      }}
+    >
+      {/* Promotion UI */}
       {promotionUI && (
         <Box
           sx={{
@@ -127,10 +176,10 @@ export default function UIBoard() {
           }}
         >
           {[
-            <ChessQueenIcon color={promotionColor} />,
-            <ChessRookFilledIcon color={promotionColor} />,
-            <ChessBishopFilledIcon color={promotionColor} />,
-            <ChessKnightFilledIcon color={promotionColor} />,
+            <ChessQueenIcon key="queen" color={promotionColor} />,
+            <ChessRookFilledIcon key="rook" color={promotionColor} />,
+            <ChessBishopFilledIcon key="bishop" color={promotionColor} />,
+            <ChessKnightFilledIcon key="knight" color={promotionColor} />,
           ].map((p, index) => (
             <Button
               key={index}
@@ -148,7 +197,7 @@ export default function UIBoard() {
                 const pieces = [Queen, Rook, Bishiop, Knight];
                 gameBoard.board.__board__.promotePawn(row, col, pieces[index]);
 
-                setCurrentTurn(gameBoard.board.__board__.turn); // read from board
+                setCurrentTurn(gameBoard.board.__board__.turn);
                 setPromotionUI(null);
               }}
             >
@@ -158,6 +207,7 @@ export default function UIBoard() {
         </Box>
       )}
 
+      {/* Black Timer */}
       <Box
         sx={{
           fontWeight: "bold",
@@ -167,7 +217,6 @@ export default function UIBoard() {
           margin: 0,
         }}
       >
-        {/** shows black timer */}
         <Box
           sx={{
             background: "red",
@@ -178,14 +227,7 @@ export default function UIBoard() {
             alignItems: "center",
           }}
         >
-          <Box
-            sx={{
-              padding: 1,
-            }}
-          >
-            {" "}
-            Black:{" "}
-          </Box>
+          <Box sx={{ padding: 1 }}>Black:</Box>
           <Box
             sx={{
               background: "gray",
@@ -198,7 +240,7 @@ export default function UIBoard() {
         </Box>
       </Box>
 
-      {/**  game board of 8x8 */}
+      {/* Chess Board */}
       {gameBoard.board.map((rows, r) => (
         <Box key={r} sx={{ display: "flex" }}>
           {rows.map((i, c) => {
@@ -222,7 +264,7 @@ export default function UIBoard() {
                   {Icon && <Icon size={100} />}
                   {movablePaths?.some(
                     ([row, col]) => row === r && col === c,
-                  ) && ( // displays the movable path of the piece as a orange dot
+                  ) && (
                     <Box
                       sx={{
                         position: "absolute",
@@ -258,7 +300,7 @@ export default function UIBoard() {
         </Box>
       ))}
 
-      {/** shows white timer */}
+      {/* White Timer */}
       <Box
         sx={{
           fontWeight: "bold",
@@ -276,15 +318,7 @@ export default function UIBoard() {
             display: "flex",
           }}
         >
-          {" "}
-          <Box
-            sx={{
-              padding: 1,
-            }}
-          >
-            {" "}
-            white:{" "}
-          </Box>
+          <Box sx={{ padding: 1 }}>white:</Box>
           <Box
             sx={{
               background: "gray",
@@ -296,13 +330,16 @@ export default function UIBoard() {
           </Box>
         </Box>
       </Box>
-      {/** displays the turn of player */}
+
+      {/* Turn Display */}
       <Box
         sx={{
           fontWeight: "bold",
           fontSize: "18px",
           marginBottom: 2,
           background: "gray",
+          padding: 1,
+          textAlign: "center",
         }}
       >
         Turn:{" "}
@@ -314,6 +351,57 @@ export default function UIBoard() {
           {currentTurn === "w" ? "White" : "Black"}
         </span>
       </Box>
+
+      {/* Check/Checkmate Status Display */}
+      {checkStatus && (
+        <Box
+          sx={{
+            fontSize: "32px",
+            fontWeight: "bold",
+            color: checkStatus === "CHECKMATE!" ? "#ff0000" : "#ff6600",
+            textAlign: "center",
+            padding: 2,
+            background: "rgba(255, 255, 255, 0.9)",
+            borderRadius: 2,
+            boxShadow: "0 4px 6px rgba(0,0,0,0.3)",
+            animation: checkStatus === "CHECK" ? "pulse 1s infinite" : "none",
+            "@keyframes pulse": {
+              "0%, 100%": { opacity: 1 },
+              "50%": { opacity: 0.7 },
+            },
+          }}
+        >
+          {checkStatus}
+        </Box>
+      )}
+
+      {/* Game Over Display */}
+      {gameOver && !checkStatus && (
+        <Modal
+          sx={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+          open={gameOver}
+        >
+          <Box
+            sx={{
+              fontSize: "32px",
+              fontWeight: "bold",
+              color: "#ff0000",
+              textAlign: "center",
+
+              padding: 2,
+              background: "rgba(255, 255, 255, 0.9)",
+              borderRadius: 2,
+              boxShadow: "0 4px 6px rgba(0,0,0,0.3)",
+            }}
+          >
+            TIME OUT! {whiteRemaining <= 0 ? "Black" : "White"} Wins!
+          </Box>
+        </Modal>
+      )}
     </Box>
   );
 }

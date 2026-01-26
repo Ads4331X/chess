@@ -72,9 +72,20 @@ export default class Knight {
     const movableSet = new Set(this.knightPath.map(([r, c]) => `${r},${c}`));
 
     if (movableSet.has(`${toRow},${toCol}`)) {
+      if (
+        !this.board.__board__.isLegalMove(
+          this,
+          this.row,
+          this.col,
+          toRow,
+          toCol,
+        )
+      ) {
+        return this.show();
+      }
+
       this.#move(this.row, this.col, toRow, toCol);
     }
-
     return this.show();
   }
 }

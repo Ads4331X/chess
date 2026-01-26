@@ -5,10 +5,10 @@ export class King {
     this.col = col;
     this.board = board;
     this.name = name;
+    this.type = "king";
     this.kingPath = [];
     this.legalMoves = [];
   }
-
   #isValid(check) {
     return check <= 7 && check >= 0;
   }
@@ -49,7 +49,7 @@ export class King {
 
   show() {
     this.#availablePaths();
-    return this.legalMoves;
+    return this.kingPath;
   }
 
   #isCheck(toRow, toCol) {}
