@@ -28,7 +28,7 @@ export class Queen {
         this.attackedSquare.push([r, this.col - count]);
         break;
       } else {
-        this.attackedSquare.push([r, this.col - count]); // PROTECT
+        this.attackedSquare.push([r, this.col - count]);
         break;
       }
 
@@ -51,7 +51,7 @@ export class Queen {
         this.attackedSquare.push([r, this.col + count]);
         break;
       } else {
-        this.attackedSquare.push([r, this.col + count]); // PROTECT
+        this.attackedSquare.push([r, this.col + count]);
         break;
       }
 
@@ -74,7 +74,7 @@ export class Queen {
         this.attackedSquare.push([r, this.col + count]);
         break;
       } else {
-        this.attackedSquare.push([r, this.col + count]); // PROTECT
+        this.attackedSquare.push([r, this.col + count]);
         break;
       }
 
@@ -97,7 +97,7 @@ export class Queen {
         this.attackedSquare.push([r, this.col - count]);
         break;
       } else {
-        this.attackedSquare.push([r, this.col - count]); // PROTECT
+        this.attackedSquare.push([r, this.col - count]);
         break;
       }
 
@@ -117,7 +117,7 @@ export class Queen {
         this.attackedSquare.push([r, this.col]);
         break;
       } else {
-        this.attackedSquare.push([r, this.col]); // PROTECT
+        this.attackedSquare.push([r, this.col]);
         break;
       }
     }
@@ -135,7 +135,7 @@ export class Queen {
         this.attackedSquare.push([r, this.col]);
         break;
       } else {
-        this.attackedSquare.push([r, this.col]); // PROTECT
+        this.attackedSquare.push([r, this.col]);
         break;
       }
     }
@@ -153,7 +153,7 @@ export class Queen {
         this.attackedSquare.push([this.row, c]);
         break;
       } else {
-        this.attackedSquare.push([this.row, c]); // PROTECT
+        this.attackedSquare.push([this.row, c]);
         break;
       }
     }
@@ -171,7 +171,7 @@ export class Queen {
         this.attackedSquare.push([this.row, c]);
         break;
       } else {
-        this.attackedSquare.push([this.row, c]); // PROTECT
+        this.attackedSquare.push([this.row, c]);
         break;
       }
     }

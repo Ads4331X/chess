@@ -78,8 +78,6 @@ export class King {
   show() {
     this.#availablePaths();
 
-    const movableSet = new Set(this.kingPath.map(([r, c]) => `${r},${c}`));
-
     this.legalMoves = [];
 
     for (const [r, c] of this.kingPath) {

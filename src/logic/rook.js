@@ -92,7 +92,6 @@ export default class Rook {
   }
 
   getAttackSquares() {
-    // IMPORTANT: rook attacks same squares as it can move
     this.show();
     return this.attackedSquares;
   }
