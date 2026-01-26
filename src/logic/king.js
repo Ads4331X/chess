@@ -77,6 +77,17 @@ export class King {
 
   show() {
     this.#availablePaths();
+
+    const movableSet = new Set(this.kingPath.map(([r, c]) => `${r},${c}`));
+
+    this.legalMoves = [];
+
+    for (const [r, c] of this.kingPath) {
+      if (this.board.__board__.isLegalMove(this, this.row, this.col, r, c)) {
+        this.legalMoves.push([r, c]);
+      }
+    }
+
     return this.legalMoves;
   }
 
@@ -94,12 +105,11 @@ export class King {
   }
 
   move(toRow, toCol) {
-    this.#availablePaths();
-    this.movableSet = new Set(
-      this.legalMoves.map(([row, col]) => `${row},${col}`),
-    );
+    this.show();
 
-    if (this.movableSet.has(`${toRow},${toCol}`)) {
+    const movableSet = new Set(this.legalMoves.map(([r, c]) => `${r},${c}`));
+
+    if (movableSet.has(`${toRow},${toCol}`)) {
       this.#move(this.row, this.col, toRow, toCol);
     }
 
