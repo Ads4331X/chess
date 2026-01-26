@@ -127,7 +127,7 @@ export class Bishiop {
 
   getAttackSquares() {
     this.#availablePath();
-    return this.attackedSquare; // <-- FIXED
+    return this.attackedSquare;
   }
 
   #move(fromRow, fromCol, toRow, toCol) {

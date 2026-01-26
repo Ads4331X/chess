@@ -49,7 +49,6 @@ export class King {
     );
   }
 
-  // ✅ ADD THIS METHOD
   getAttackSquares() {
     const kingMoveArea = [
       [1, 1],

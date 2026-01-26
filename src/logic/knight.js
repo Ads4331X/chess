@@ -40,13 +40,11 @@ export default class Knight {
     }
   }
 
-  // Legal moves (considering check)
   show() {
     this.#availablePath();
     return this.knightPath;
   }
 
-  // Attack squares (independent of legality)
   getAttackSquares() {
     this.#availablePath();
     return this.knightPath;
