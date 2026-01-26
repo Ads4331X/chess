@@ -92,13 +92,16 @@ export class King {
     if (!this.board.__board__.isTurn(this.color)) {
       return false;
     }
+    const target = this.board[toRow][toCol];
+
+    if (target) this.board.__board__.playCaptureSound();
+    else this.board.__board__.playMoveSound();
 
     const king = this.board[fromRow][fromCol];
     this.board[toRow][toCol] = king;
     this.board[fromRow][fromCol] = null;
     this.row = toRow;
     this.col = toCol;
-    this.board.__board__.playMoveSound();
 
     this.board.__board__.switchTurn();
   }

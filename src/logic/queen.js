@@ -202,7 +202,8 @@ export class Queen {
     if (!this.board.__board__.isTurn(this.color)) return false;
 
     const target = this.board[toRow][toCol];
-    if (target) this.board[toRow][toCol] = null; // capture enemy
+    if (target) this.board.__board__.playCaptureSound();
+    else this.board.__board__.playMoveSound();
 
     const queen = this.board[fromRow][fromCol];
     this.board[toRow][toCol] = queen;
@@ -210,7 +211,6 @@ export class Queen {
 
     this.row = toRow;
     this.col = toCol;
-    this.board.__board__.playMoveSound();
 
     this.board.__board__.switchTurn();
   }

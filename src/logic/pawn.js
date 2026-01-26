@@ -104,6 +104,11 @@ export default class Pawn {
 
     const pawn = this.board[fromRow][fromCol];
 
+    const target = this.board[toRow][toCol];
+
+    if (target) this.board.__board__.playCaptureSound();
+    else this.board.__board__.playMoveSound();
+
     // en passant capture
     if (fromCol !== toCol && !this.board[toRow][toCol]) {
       const capturedPawnRow = toRow - this.direction;
@@ -125,8 +130,6 @@ export default class Pawn {
       };
       return;
     }
-
-    this.board.__board__.playMoveSound();
 
     this.board.__board__.switchTurn();
   }

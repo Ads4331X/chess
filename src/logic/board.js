@@ -1,5 +1,6 @@
 import { Pieces } from "./pieces";
 import moveSound from "../assets/move.mp3";
+import captureSound from "../assets/capture.mp3";
 
 export class Board {
   constructor() {
@@ -33,6 +34,11 @@ export class Board {
       }
     }
     return false;
+  }
+
+  playCaptureSound() {
+    const audio = new Audio(captureSound);
+    audio.play();
   }
 
   playMoveSound() {

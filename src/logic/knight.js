@@ -53,6 +53,11 @@ export default class Knight {
   #move(fromRow, fromCol, toRow, toCol) {
     if (!this.board.__board__.isTurn(this.color)) return false;
 
+    const target = this.board[toRow][toCol];
+
+    if (target) this.board.__board__.playCaptureSound();
+    else this.board.__board__.playMoveSound();
+
     const knight = this.board[fromRow][fromCol];
     if (!knight) return;
 
@@ -60,7 +65,6 @@ export default class Knight {
     this.board[fromRow][fromCol] = null;
     this.row = toRow;
     this.col = toCol;
-    this.board.__board__.playMoveSound();
 
     this.board.__board__.switchTurn();
   }

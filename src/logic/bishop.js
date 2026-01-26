@@ -132,11 +132,10 @@ export class Bishiop {
 
   #move(fromRow, fromCol, toRow, toCol) {
     if (!this.board.__board__.isTurn(this.color)) return false;
-
     const target = this.board[toRow][toCol];
-    if (target) {
-      this.board[toRow][toCol] = null;
-    }
+
+    if (target) this.board.__board__.playCaptureSound();
+    else this.board.__board__.playMoveSound();
 
     const bishiop = this.board[fromRow][fromCol];
     this.board[toRow][toCol] = bishiop;
@@ -148,8 +147,6 @@ export class Bishiop {
     if (this.board.__board__.recordMove) {
       this.board.__board__.recordMove(bishiop, fromRow, fromCol, toRow, toCol);
     }
-
-    this.board.__board__.playMoveSound();
 
     this.board.__board__.switchTurn();
   }
