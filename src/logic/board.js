@@ -6,7 +6,7 @@ import promoteSound from "../assets/promote.mp3";
 
 export class Board {
   constructor() {
-    this.representRow = ["a", "b", "c", "d", "e", "f", "g", "h"]; // representation
+    this.representRow = ["a", "b", "c", "d", "e", "f", "g", "h"];
     this.representCol = ["8", "7", "6", "5", "4", "3", "2", "1"];
     this.initializeBoard();
     this.lastMove = null;
@@ -23,6 +23,7 @@ export class Board {
     pieces.initialize();
     this.board.__board__ = this;
   }
+
   isSquareAttacked(x, y, byColor) {
     for (let r = 0; r < 8; r++) {
       for (let c = 0; c < 8; c++) {
@@ -78,9 +79,11 @@ export class Board {
   switchTurn() {
     this.turn = this.turn === "w" ? "b" : "w";
   }
+
   isTurn(color) {
     return this.turn === color;
   }
+
   Display() {
     return this.board;
   }
@@ -159,7 +162,7 @@ export class Board {
   }
 
   promotePawn(row, col, PieceClass) {
-    const pawn = this.board[row][col]; // Get the pawn that's currently on the promotion square
+    const pawn = this.board[row][col];
 
     if (!pawn || pawn.type !== "pawn") {
       console.error("No pawn found for promotion at", row, col);

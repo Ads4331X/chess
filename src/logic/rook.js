@@ -5,8 +5,10 @@ export default class Rook {
     this.col = col;
     this.board = board;
     this.name = name;
+    this.type = "rook"; // IMPORTANT: Needed for castling detection
     this.rookPath = [];
     this.attackedSquares = [];
+    this.hasMoved = false;
   }
 
   show() {
@@ -20,12 +22,11 @@ export default class Rook {
   #rookPath() {
     const currentRook = this.board[this.row][this.col];
     if (!currentRook) return;
-    let rookColor = this.color;
+    const rookColor = this.color;
 
     // UP
     for (let i = this.row - 1; i >= 0; i--) {
       const square = this.board[i][this.col];
-
       if (square === null) {
         this.rookPath.push([i, this.col]);
         this.attackedSquares.push([i, this.col]);
@@ -42,7 +43,6 @@ export default class Rook {
     // DOWN
     for (let i = this.row + 1; i < 8; i++) {
       const square = this.board[i][this.col];
-
       if (square === null) {
         this.rookPath.push([i, this.col]);
         this.attackedSquares.push([i, this.col]);
@@ -59,7 +59,6 @@ export default class Rook {
     // LEFT
     for (let i = this.col - 1; i >= 0; i--) {
       const square = this.board[this.row][i];
-
       if (square === null) {
         this.rookPath.push([this.row, i]);
         this.attackedSquares.push([this.row, i]);
@@ -76,7 +75,6 @@ export default class Rook {
     // RIGHT
     for (let i = this.col + 1; i < 8; i++) {
       const square = this.board[this.row][i];
-
       if (square === null) {
         this.rookPath.push([this.row, i]);
         this.attackedSquares.push([this.row, i]);
@@ -126,12 +124,14 @@ export default class Rook {
     if (target) this.board.__board__.playCaptureSound();
     else this.board.__board__.playMoveSound();
 
-    let current = this.board[fromRow][fromCol];
+    const current = this.board[fromRow][fromCol];
     if (!current) return;
+
     this.board[toRow][toCol] = current;
     this.board[fromRow][fromCol] = null;
     this.row = toRow;
     this.col = toCol;
+    this.hasMoved = true;
 
     this.board.__board__.afterMove();
   }
