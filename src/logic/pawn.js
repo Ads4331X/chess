@@ -106,8 +106,14 @@ export default class Pawn {
 
     const target = this.board[toRow][toCol];
 
-    if (target) this.board.__board__.playCaptureSound();
-    else this.board.__board__.playMoveSound();
+    const isPromotionMove =
+      (this.color === "w" && toRow === 0) ||
+      (this.color === "b" && toRow === 7);
+
+    if (!isPromotionMove) {
+      if (target) this.board.__board__.playCaptureSound();
+      else this.board.__board__.playMoveSound();
+    }
 
     // en passant capture
     if (fromCol !== toCol && !this.board[toRow][toCol]) {
@@ -131,7 +137,7 @@ export default class Pawn {
       return;
     }
 
-    this.board.__board__.switchTurn();
+    this.board.__board__.afterMove();
   }
 
   move(toRow, toCol) {

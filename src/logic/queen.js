@@ -212,7 +212,7 @@ export class Queen {
     this.row = toRow;
     this.col = toCol;
 
-    this.board.__board__.switchTurn();
+    this.board.__board__.afterMove();
   }
 
   move(toRow, toCol) {

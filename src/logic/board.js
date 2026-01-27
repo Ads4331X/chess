@@ -1,6 +1,8 @@
 import { Pieces } from "./pieces";
 import moveSound from "../assets/move.mp3";
 import captureSound from "../assets/capture.mp3";
+import checkSound from "../assets/check.mp3";
+import promoteSound from "../assets/promote.mp3";
 
 export class Board {
   constructor() {
@@ -10,6 +12,7 @@ export class Board {
     this.lastMove = null;
     this.turn = "w";
     this.pendingPromotion = null;
+    this.wasInCheck = false;
   }
 
   initializeBoard() {
@@ -34,6 +37,16 @@ export class Board {
       }
     }
     return false;
+  }
+
+  playPromoteSound() {
+    const audio = new Audio(promoteSound);
+    audio.play();
+  }
+
+  playCheckSound() {
+    const audio = new Audio(checkSound);
+    audio.play();
   }
 
   playCaptureSound() {
@@ -167,5 +180,15 @@ export class Board {
 
     this.pendingPromotion = null;
     this.switchTurn();
+    this.playPromoteSound();
+  }
+
+  afterMove() {
+    this.switchTurn();
+
+    const inCheck = this.isInCheck(this.turn);
+    if (inCheck) this.playCheckSound();
+
+    this.wasInCheck = inCheck;
   }
 }

@@ -148,7 +148,7 @@ export class Bishiop {
       this.board.__board__.recordMove(bishiop, fromRow, fromCol, toRow, toCol);
     }
 
-    this.board.__board__.switchTurn();
+    this.board.__board__.afterMove();
   }
 
   move(toRow, toCol) {
