@@ -99,7 +99,7 @@ export class Board {
 
         const moves = piece.show();
         for (let [toR, toC] of moves) {
-          // Test if this move gets out of check
+          //  if this move gets out of check
           if (this.isLegalMove(piece, r, c, toR, toC)) {
             return false; // Found a legal move, not checkmate
           }
@@ -193,5 +193,28 @@ export class Board {
     if (inCheck) this.playCheckSound();
 
     this.wasInCheck = inCheck;
+    if (this.isStalemate(this.turn)) {
+      console.log(`${this.turn} is stalemated!`);
+    }
+  }
+
+  isStalemate(color) {
+    if (this.isInCheck(color)) return false;
+
+    for (let r = 0; r < 8; r++) {
+      for (let c = 0; c < 8; c++) {
+        const piece = this.board[r][c];
+        if (!piece || piece.color !== color) continue;
+
+        const moves = piece.show();
+        for (let [toR, toC] of moves) {
+          if (this.isLegalMove(piece, r, c, toR, toC)) {
+            return false; // Found a legal move
+          }
+        }
+      }
+    }
+
+    return true; // stalemate
   }
 }

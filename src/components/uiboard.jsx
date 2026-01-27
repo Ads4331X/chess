@@ -22,6 +22,20 @@ export default function UIBoard() {
   const [promotionUI, setPromotionUI] = useState(null);
   const [checkStatus, setCheckStatus] = useState("");
 
+  useEffect(() => {
+    if (gameBoard.board.__board__.isCheckmate(currentTurn)) {
+      setCheckStatus("CHECKMATE!");
+      setGameOver(true);
+    } else if (gameBoard.board.__board__.isStalemate(currentTurn)) {
+      setCheckStatus("STALEMATE!");
+      setGameOver(true);
+    } else if (gameBoard.board.__board__.isInCheck(currentTurn)) {
+      setCheckStatus("CHECK");
+    } else {
+      setCheckStatus("");
+    }
+  }, [currentTurn, gameBoard]);
+
   // Check for check/checkmate after each move
   useEffect(() => {
     if (gameBoard.board.__board__.isCheckmate(currentTurn)) {
