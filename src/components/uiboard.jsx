@@ -7,39 +7,42 @@ import Status from "./status";
 import ChessBoard from "./chessBoard";
 
 export default function UIBoard() {
-  const [gameBoard] = useState(new Board());
+  const timeLimit = 5 * 60; // 5 minutes in seconds
+
+  // Initialize state
+  const [gameBoard, setGameBoard] = useState(new Board());
   const [movablePaths, setMovablePath] = useState([]);
   const [selectedPiece, setSelectedPiece] = useState(null);
-
-  const timeLimit = 5 * 60; // 5 minutes in seconds
   const [whiteRemaining, setWhiteRemaining] = useState(timeLimit);
   const [blackRemaining, setBlackRemaining] = useState(timeLimit);
-  const [currentTurn, setCurrentTurn] = useState(
-    gameBoard.board.__board__.turn,
-  );
+  const [currentTurn, setCurrentTurn] = useState("w");
   const [isRunning, setIsRunning] = useState(true);
   const [gameOver, setGameOver] = useState(false);
   const [promotionUI, setPromotionUI] = useState(null);
   const [checkStatus, setCheckStatus] = useState("");
 
+  // FIXED: Reset function creates a NEW board instance
+  const handleReset = () => {
+    const newBoard = new Board();
+    setGameBoard(newBoard);
+    setCurrentTurn("w");
+    setWhiteRemaining(timeLimit);
+    setBlackRemaining(timeLimit);
+    setGameOver(false);
+    setCheckStatus("");
+    setSelectedPiece(null);
+    setMovablePath([]);
+    setPromotionUI(null);
+    setIsRunning(true);
+  };
+
+  // Check for check/checkmate/stalemate after each move
   useEffect(() => {
     if (gameBoard.board.__board__.isCheckmate(currentTurn)) {
       setCheckStatus("CHECKMATE!");
       setGameOver(true);
     } else if (gameBoard.board.__board__.isStalemate(currentTurn)) {
       setCheckStatus("STALEMATE!");
-      setGameOver(true);
-    } else if (gameBoard.board.__board__.isInCheck(currentTurn)) {
-      setCheckStatus("CHECK");
-    } else {
-      setCheckStatus("");
-    }
-  }, [currentTurn, gameBoard]);
-
-  // Check for check/checkmate after each move
-  useEffect(() => {
-    if (gameBoard.board.__board__.isCheckmate(currentTurn)) {
-      setCheckStatus("CHECKMATE!");
       setGameOver(true);
     } else if (gameBoard.board.__board__.isInCheck(currentTurn)) {
       setCheckStatus("CHECK");
@@ -154,6 +157,7 @@ export default function UIBoard() {
         gameOver={gameOver}
         whiteRemaining={whiteRemaining}
         blackRemaining={blackRemaining}
+        onReset={handleReset}
       />
     </Box>
   );

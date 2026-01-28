@@ -1,4 +1,5 @@
 import { Box, Modal } from "@mui/material";
+import { ResetBtn } from "./ResetBtn";
 
 export default function Status({
   currentTurn,
@@ -6,6 +7,7 @@ export default function Status({
   gameOver,
   whiteRemaining,
   blackRemaining,
+  onReset,
 }) {
   return (
     <>
@@ -30,26 +32,26 @@ export default function Status({
         </span>
       </Box>
 
-      {/* Check/Checkmate Status */}
-      {checkStatus && (
+      {/* Check Status  */}
+      {checkStatus === "CHECK" && (
         <Box
           sx={{
             fontSize: "32px",
             fontWeight: "bold",
-            color: checkStatus === "CHECKMATE!" ? "#ff0000" : "#ff6600",
+            color: "#ff6600",
             textAlign: "center",
             padding: 2,
             background: "rgba(255, 255, 255, 0.9)",
             borderRadius: 2,
             boxShadow: "0 4px 6px rgba(0,0,0,0.3)",
-            animation: checkStatus === "CHECK" ? "pulse 1s infinite" : "none",
+            animation: "pulse 1s infinite",
             "@keyframes pulse": {
               "0%, 100%": { opacity: 1 },
               "50%": { opacity: 0.7 },
             },
           }}
         >
-          {checkStatus}
+          CHECK
         </Box>
       )}
 
@@ -58,6 +60,7 @@ export default function Status({
         <Modal
           sx={{
             display: "flex",
+            flexDirection: "column",
             justifyContent: "center",
             alignItems: "center",
           }}
@@ -65,17 +68,27 @@ export default function Status({
         >
           <Box
             sx={{
-              fontSize: "32px",
-              fontWeight: "bold",
-              color: "#ff0000",
-              textAlign: "center",
-              padding: 2,
-              background: "rgba(255, 255, 255, 0.9)",
-              borderRadius: 2,
-              boxShadow: "0 4px 6px rgba(0,0,0,0.3)",
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+              gap: 2,
             }}
           >
-            TIME OUT! {whiteRemaining <= 0 ? "Black" : "White"} Wins!
+            <Box
+              sx={{
+                fontSize: "32px",
+                fontWeight: "bold",
+                color: "#ff0000",
+                textAlign: "center",
+                padding: 2,
+                background: "rgba(255, 255, 255, 0.9)",
+                borderRadius: 2,
+                boxShadow: "0 4px 6px rgba(0,0,0,0.3)",
+              }}
+            >
+              TIME OUT! {whiteRemaining <= 0 ? "Black" : "White"} Wins!
+            </Box>
+            <ResetBtn onReset={onReset} />
           </Box>
         </Modal>
       )}
@@ -85,6 +98,7 @@ export default function Status({
         <Modal
           sx={{
             display: "flex",
+            flexDirection: "column",
             justifyContent: "center",
             alignItems: "center",
           }}
@@ -92,17 +106,65 @@ export default function Status({
         >
           <Box
             sx={{
-              fontSize: "32px",
-              fontWeight: "bold",
-              color: "#ff0000",
-              textAlign: "center",
-              padding: 2,
-              background: "rgba(255, 255, 255, 0.9)",
-              borderRadius: 2,
-              boxShadow: "0 4px 6px rgba(0,0,0,0.3)",
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+              gap: 2,
             }}
           >
-            CHECKMATE! {currentTurn === "w" ? "Black" : "White"} Wins!
+            <Box
+              sx={{
+                fontSize: "32px",
+                fontWeight: "bold",
+                color: "#ff0000",
+                textAlign: "center",
+                padding: 2,
+                background: "rgba(255, 255, 255, 0.9)",
+                borderRadius: 2,
+                boxShadow: "0 4px 6px rgba(0,0,0,0.3)",
+              }}
+            >
+              CHECKMATE! {currentTurn === "w" ? "Black" : "White"} Wins!
+            </Box>
+            <ResetBtn onReset={onReset} />
+          </Box>
+        </Modal>
+      )}
+
+      {/* Game Over - Stalemate */}
+      {checkStatus === "STALEMATE!" && (
+        <Modal
+          sx={{
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+          open={true}
+        >
+          <Box
+            sx={{
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+              gap: 2,
+            }}
+          >
+            <Box
+              sx={{
+                fontSize: "32px",
+                fontWeight: "bold",
+                color: "#ffa500",
+                textAlign: "center",
+                padding: 2,
+                background: "rgba(255, 255, 255, 0.9)",
+                borderRadius: 2,
+                boxShadow: "0 4px 6px rgba(0,0,0,0.3)",
+              }}
+            >
+              STALEMATE! It's a Draw!
+            </Box>
+            <ResetBtn onReset={onReset} />
           </Box>
         </Modal>
       )}
